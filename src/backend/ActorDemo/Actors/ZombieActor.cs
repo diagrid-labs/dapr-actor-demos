@@ -18,7 +18,13 @@ namespace ActorDemo
         public Coordinate Position { get; set; }
         private const int Speed = 1;
         private const int Damage = 2;
-        
+
+        public async Task SetNewPosition(Coordinate position)
+        {
+            var random = new Random();
+            Position = new Coordinate(random.Next(0, position.X), random.Next(0, position.Y));
+        }
+
         public async Task Walk()
         {
 

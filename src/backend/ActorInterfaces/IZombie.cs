@@ -11,6 +11,8 @@ namespace ActorInterfaces
     {
         Coordinate Position { get; set; }
 
+        Task SetNewPosition(Coordinate position);
+
         // Find Hero and move towards them.
         Task Walk();
 

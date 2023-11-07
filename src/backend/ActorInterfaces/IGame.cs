@@ -9,6 +9,7 @@ namespace ActorInterfaces
 {
     public interface IGame : IActor
     {
-        Task StartWave();
+        Task StartNewGame(GameData data);
+        Task NextWave();
     }
 }
