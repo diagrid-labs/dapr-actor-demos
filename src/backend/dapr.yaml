@@ -1,6 +1,6 @@
 version: 1
 common:
-  resourcesPath: resources/
+  resourcesPath: ./resources/
 apps:
   - appID: actor-demo
     appDirPath: ./ActorDemo/
