@@ -12,15 +12,16 @@ namespace ActorDemo
         public HeroActor(ActorHost host) : base(host)
         {
         }
-        
+
         public string Name { get; set; }
+        
         public int Health { get; set; }
         public Coordinate Position { get; set; }
-        private const int Speed = 2;
+        private const double Speed = 2;
         private const int Damage = 10;
-        private const int AttackDistance = 1;
+        private const double AttackDistance = 1;
 
-        public async Task Run(int x, int y)
+        public async Task Run(double x, double y)
         {
             throw new NotImplementedException();
         }

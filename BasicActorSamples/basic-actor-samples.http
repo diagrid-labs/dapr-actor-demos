@@ -1,0 +1,24 @@
+@daprHttp=http://localhost:3500
+@actorId="Rene"
+
+### Say Hello World
+POST {{ daprHttp }}/v1.0/actors/HelloWorldActor/{{ actorId }}/method/SayHelloWorld
+
+
+### Say hello with an input
+@actorId={{$guid}}
+POST {{ daprHttp }}/v1.0/actors/HelloWorldActor/{{ actorId }}/method/SayHello
+Content-Type: application/json
+
+"Rene"
+
+### Get the saved greeting for the actor with ID Alex
+@actorId=Alex
+
+GET {{ daprHttp }}/v1.0/actors/StatefulActor/{{ actorId }}/method/GetGreeting
+
+### Set the greeting for the actor with ID Alex
+POST {{ daprHttp }}/v1.0/actors/StatefulActor/{{ actorId }}/method/SetGreeting
+Content-Type: application/json
+
+"Hello from StatefulActor!"

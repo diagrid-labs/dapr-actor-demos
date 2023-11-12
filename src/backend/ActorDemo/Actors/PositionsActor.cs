@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ActorInterfaces;
 using Dapr.Actors.Runtime;
 
@@ -14,15 +10,39 @@ namespace ActorDemo
         }
 
         public List<IZombie> Zombies { get; set; }
-        public List<IHero> Heroes {get ; set; }
-        public async Task<IList<IZombie>> GetClosestZombies()
+
+        public async Task<IZombie> GetClosestZombie()
         {
-            throw new NotImplementedException();
+            return await Task.FromResult(
+                Zombies.OrderBy(z => z.DistanceToHero).First());
         }
 
         public static double GetEuclidianDistance(Coordinate position1, Coordinate position2)
         {
             return Math.Sqrt((position1.X - position2.X) * (position1.X - position2.X) + (position1.Y - position2.Y) * (position1.Y - position2.Y));
         }
+
+        public Task UpdateZombiePosition(IZombie zombie)
+        {
+            RemoveZombie(zombie);
+            AddZombie(zombie);
+
+            return Task.CompletedTask;
+        }
+
+        public Task AddZombie(IZombie zombie)
+        {
+            Zombies.Add(zombie);
+
+            return Task.CompletedTask;
+        }
+
+        public Task RemoveZombie(IZombie zombie)
+        {
+            Zombies.Remove(Zombies.First(z => z.Name == zombie.Name));
+
+            return Task.CompletedTask;
+        }
+
     }
 }

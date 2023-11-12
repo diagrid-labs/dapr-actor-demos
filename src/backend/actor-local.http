@@ -1,0 +1,12 @@
+@daprHttp=http://localhost:3500
+@gameId=game1
+
+POST {{ daprHttp }}/v1.0/actors/GameActor/{{ game1 }}/method/StartNewGame
+Content-Type: application/json
+
+{
+    "Name": "Game 1"
+    "AreaSize": 10
+}
+
+GET {{ daprHttp }}/v1.0/actors/GameActor/{{ game1 }}/method/StartNewGame

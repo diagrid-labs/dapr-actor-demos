@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ActorInterfaces;
 using Dapr.Actors;
 using Dapr.Actors.Client;
@@ -14,28 +10,36 @@ namespace ActorDemo
         public GameActor(ActorHost host) : base(host)
         {
         }
-
-        public string Name { get; set; }
-        public int Wave { get; set; }
+        public GameData GameData { get; set; }
         public string[] ZombieIds { get; set; }
         public string[] HeroIds { get; set; }
 
-        public async Task StartNewGame(GameData data)
+        public async Task StartNewGame(GameData gameData)
         {
-            Name = data.Name;
-            Wave = 0;
+            GameData = gameData;
+            var heroActorId = new ActorId(gameData.HeroName);
+            var heroProxy = ActorProxy.Create<IHero>(heroActorId, nameof(HeroActor));
+
+            var positionsActorId = new ActorId(Id.GetId());
+            var positionsProxy = ActorProxy.Create<IPositions>(positionsActorId, nameof(PositionsActor));
 
             for (int i = 0; i < 10; i++)
             {
-                var actorId =new ActorId($"{Name}-{i}");
-                var zombieProxy = ActorProxy.Create<IZombie>(actorId, nameof(ZombieActor));
-                await zombieProxy.SetNewPosition(new Coordinate(data.AreaSize, data.AreaSize));
+                var zombieActorId =new ActorId($"{Id.GetId()}-{i}");
+                var zombieProxy = ActorProxy.Create<IZombie>(zombieActorId, nameof(ZombieActor));
+                await zombieProxy.SetRandomPosition(new Coordinate(GameData.AreaSize, GameData.AreaSize));
+                await positionsProxy.AddZombie(zombieProxy);
             }
         }
 
         public async Task NextWave()
         {
-            throw new NotImplementedException();
+            GameData = new GameData(GameData.HeroName, GameData.AreaSize, GameData.Wave + 1);
+        }
+
+        public async Task<GameData> GetGameData()
+        {
+            return await StateManager.GetStateAsync<GameData>("GameData");
         }
     }
 }

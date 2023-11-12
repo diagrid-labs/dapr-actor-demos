@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{891F6644-EAB7-415A-A7E9-18D1F4065F70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActorDemo", "ActorDemo\ActorDemo.csproj", "{FF7870D3-3308-4273-A22E-BF1F64422831}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{93EA7251-3D5B-48C4-AE5C-4D33FE54F280}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActorDemo", "src\backend\ActorDemo\ActorDemo.csproj", "{FF7870D3-3308-4273-A22E-BF1F64422831}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActorInterfaces", "ActorInterfaces\ActorInterfaces.csproj", "{0EA444B0-E53D-493F-B3F3-8381DE6D015B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,13 +17,13 @@ Global
 		{FF7870D3-3308-4273-A22E-BF1F64422831}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF7870D3-3308-4273-A22E-BF1F64422831}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF7870D3-3308-4273-A22E-BF1F64422831}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EA444B0-E53D-493F-B3F3-8381DE6D015B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EA444B0-E53D-493F-B3F3-8381DE6D015B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EA444B0-E53D-493F-B3F3-8381DE6D015B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EA444B0-E53D-493F-B3F3-8381DE6D015B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{93EA7251-3D5B-48C4-AE5C-4D33FE54F280} = {891F6644-EAB7-415A-A7E9-18D1F4065F70}
-		{FF7870D3-3308-4273-A22E-BF1F64422831} = {93EA7251-3D5B-48C4-AE5C-4D33FE54F280}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {73803EE7-57CE-43C5-A619-F24D1E7056CB}

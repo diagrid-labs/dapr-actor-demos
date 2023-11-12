@@ -1,17 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Dapr.Actors;
-using Dapr.Actors.Runtime;
 
 namespace ActorInterfaces
 {
     public interface IHero : IActor
     {
+        string Name { get; set; }
+        
         Coordinate Position { get; set; }
 
-        Task Run(int x, int y);
+        Task Run(double x, double y);
 
         Task Attack();
 

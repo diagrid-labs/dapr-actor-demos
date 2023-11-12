@@ -1,17 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Dapr.Actors;
-using Dapr.Actors.Runtime;
 
 namespace ActorInterfaces
 {
     public interface IZombie : IActor
     {
+        string Name { get; set; }
         Coordinate Position { get; set; }
+        public double DistanceToHero { get; set; }
 
-        Task SetNewPosition(Coordinate position);
+        Task SetRandomPosition(Coordinate position);
 
         // Find Hero and move towards them.
         Task Walk();
