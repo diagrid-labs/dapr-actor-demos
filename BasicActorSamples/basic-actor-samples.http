@@ -81,3 +81,8 @@ Content-Type: application/json
         }
     }
 ]
+
+### Get Dapr actor info
+GET {{ daprHttp }}/dapr/config
+dapr-app-id: basic-actor-demos
+

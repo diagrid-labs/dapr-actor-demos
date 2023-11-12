@@ -16,18 +16,20 @@ namespace BasicActorSamples.Actors
     
     public class StatefulActor : Actor, IStatefulActor
     {
+        public const string GREETING_KEY = "greeting";
+        
         public StatefulActor(ActorHost host) : base(host)
         {
         }
 
         public async Task SetGreeting(string greeting)
         {
-           await StateManager.SetStateAsync("greeting", greeting);
+           await StateManager.SetStateAsync(GREETING_KEY, greeting);
         }
 
         public async Task<string> GetGreeting()
         {
-            return await StateManager.GetStateAsync<string>("greeting");
+            return await StateManager.GetStateAsync<string>(GREETING_KEY);
         }
     }
 }
