@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Dapr.Actors;
-using Dapr.Actors.Client;
 using Dapr.Actors.Runtime;
 
 namespace BasicActorSamples.Actors
@@ -16,7 +11,7 @@ namespace BasicActorSamples.Actors
     
     public class StatefulActor : Actor, IStatefulActor
     {
-        public const string GREETING_KEY = "greeting";
+        private const string GREETING_KEY = "greeting";
         
         public StatefulActor(ActorHost host) : base(host)
         {

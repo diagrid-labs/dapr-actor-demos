@@ -86,3 +86,13 @@ Content-Type: application/json
 GET {{ daprHttp }}/dapr/config
 dapr-app-id: basic-actor-demos
 
+### Set Reminder
+@actorId={{$guid}}
+POST {{ daprHttp }}/v1.0/actors/ReminderActor/{{ actorId }}/reminders/alarm
+dapr-app-id: basic-actor-demos
+Content-Type: application/json
+
+{
+    "dueTime" : "0h0m3s0ms",
+    "period" : "R3/P0Y0M0W0DT0H10M0S"
+}
