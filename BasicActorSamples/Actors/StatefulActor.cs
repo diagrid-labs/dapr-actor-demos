@@ -27,7 +27,6 @@ namespace BasicActorSamples.Actors
 
         public async Task<string> GetGreeting()
         {
-            Console.WriteLine($"Getting greeting for {this.Id.ToString()}");
             return await StateManager.GetStateAsync<string>("greeting");
         }
     }

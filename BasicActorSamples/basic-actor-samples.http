@@ -22,3 +22,62 @@ POST {{ daprHttp }}/v1.0/actors/StatefulActor/{{ actorId }}/method/SetGreeting
 Content-Type: application/json
 
 "Hello from StatefulActor!"
+
+### Set the greeting using state endpoint for the actor with ID Alex
+POST {{ daprHttp }}/v1.0/actors/StatefulActor/{{ actorId }}/state
+Content-Type: application/json
+
+[
+    {
+        "operation": "upsert",
+        "request": {
+            "key": "greeting",
+            "value": "Hello from StatefulActor (state endpoint)!"
+        }
+    }
+]
+
+### Get the greeting using state endpoint for the actor with ID Alex
+GET {{ daprHttp }}/v1.0/actors/StatefulActor/{{ actorId }}/state/greeting
+
+
+### Set two keys using state endpoint for the actor with ID Alex
+POST {{ daprHttp }}/v1.0/actors/StatefulActor/{{ actorId }}/state
+Content-Type: application/json
+
+[
+    {
+        "operation": "upsert",
+        "request": {
+            "key": "greeting",
+            "value": "Hello from StatefulActor (state endpoint)!"
+        }
+    },
+    {
+        "operation": "upsert",
+        "request": {
+            "key": "date",
+            "value": "{{$datetime iso8601}}"
+        }
+    }
+]
+
+### Set one key, delete anotther using state endpoint for the actor with ID Alex
+POST {{ daprHttp }}/v1.0/actors/StatefulActor/{{ actorId }}/state
+Content-Type: application/json
+
+[
+    {
+        "operation": "upsert",
+        "request": {
+            "key": "greeting",
+            "value": "Hello from StatefulActor (state endpoint)!"
+        }
+    },
+    {
+        "operation": "delete",
+        "request": {
+            "key": "date"
+        }
+    }
+]
