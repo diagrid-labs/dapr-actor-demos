@@ -87,12 +87,20 @@ GET {{ daprHttp }}/dapr/config
 dapr-app-id: basic-actor-demos
 
 ### Set Reminder
-@actorId={{$guid}}
+@actorId=alarmclock1
 POST {{ daprHttp }}/v1.0/actors/ReminderActor/{{ actorId }}/reminders/snooze
 dapr-app-id: basic-actor-demos
 Content-Type: application/json
 
 {
     "dueTime" : "0h0m3s0ms",
-    "period" : "R3/P0Y0M0W0DT0H10M0S"
+    "period" : "R3/P0Y0M0W0DT0H05M0S"
 }
+
+
+### Get the greeting using state endpoint for the actor with ID Alex
+GET {{ daprHttp }}/v1.0/actors/ReminderActor/{{ actorId }}/state/snoozecount
+dapr-app-id: basic-actor-demos
+
+### Reset the snooze count
+POST {{ daprHttp }}/v1.0/actors/ReminderActor/{{ actorId }}/method/ResetSnoozeCount
