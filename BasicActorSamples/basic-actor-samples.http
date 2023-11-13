@@ -88,7 +88,7 @@ dapr-app-id: basic-actor-demos
 
 ### Set Reminder
 @actorId={{$guid}}
-POST {{ daprHttp }}/v1.0/actors/ReminderActor/{{ actorId }}/reminders/alarm
+POST {{ daprHttp }}/v1.0/actors/ReminderActor/{{ actorId }}/reminders/snooze
 dapr-app-id: basic-actor-demos
 Content-Type: application/json
 

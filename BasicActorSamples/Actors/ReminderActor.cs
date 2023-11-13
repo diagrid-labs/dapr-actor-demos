@@ -10,8 +10,8 @@ namespace BasicActorSamples.Actors
     
     public class ReminderActor : Actor, IReminderActor, IRemindable
     {
-        private const string ALARMSTATUS_KEY = "alarmstatus";
-        private const string REMINDER_NAME = "alarm";
+        private const string IS_SNOOZING_KEY = "is_snoozing";
+        private const string REMINDER_NAME = "snooze";
         
         public ReminderActor(ActorHost host) : base(host)
         {
@@ -19,7 +19,7 @@ namespace BasicActorSamples.Actors
 
         public async Task<string> GetAlarmStatus()
         {
-            return await StateManager.GetStateAsync<bool>(ALARMSTATUS_KEY) ? "Alarm went off!" : "Alarm did not went off.";
+            return await StateManager.GetStateAsync<bool>(IS_SNOOZING_KEY) ? "Snoozing!" : "Not snoozing.";
         }
 
         public Task ReceiveReminderAsync(string reminderName, byte[] state, TimeSpan dueTime, TimeSpan period)
@@ -27,7 +27,7 @@ namespace BasicActorSamples.Actors
             if (reminderName == REMINDER_NAME)
             {
                 Console.WriteLine($"{REMINDER_NAME} fired!");
-                StateManager.SetStateAsync(ALARMSTATUS_KEY, true);
+                StateManager.SetStateAsync(IS_SNOOZING_KEY, true);
             }
 
             return Task.CompletedTask;
