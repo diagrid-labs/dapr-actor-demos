@@ -5,6 +5,7 @@ builder.Services.AddActors(options =>
     // Register actor types and configure actor settings
     options.Actors.RegisterActor<BasicActorSamples.Actors.HelloWorldActor>();
     options.Actors.RegisterActor<BasicActorSamples.Actors.StatefulActor>();
+    options.Actors.RegisterActor<BasicActorSamples.Actors.TimerActor>();
     options.Actors.RegisterActor<BasicActorSamples.Actors.ReminderActor>();
 });
 

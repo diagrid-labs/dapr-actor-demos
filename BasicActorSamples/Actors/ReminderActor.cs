@@ -26,7 +26,7 @@ namespace BasicActorSamples.Actors
         {
             if (reminderName == REMINDER_NAME)
             {
-                Console.WriteLine($"{REMINDER_NAME} received!");
+                Console.WriteLine($"{REMINDER_NAME} received from reminder!");
                 int count = 1;
                 var conditionalValue = await StateManager.TryGetStateAsync<int>(SNOOZE_COUNT_KEY);
                 if (conditionalValue.HasValue)

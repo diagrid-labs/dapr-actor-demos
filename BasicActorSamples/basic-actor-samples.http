@@ -1,7 +1,13 @@
 @daprHttp=http://localhost:3500
-@actorId="Rene"
+
+### Get Dapr actor info
+GET {{ daprHttp }}/dapr/config
+dapr-app-id: basic-actor-demos
+
 
 ### Say Hello World
+@actorId="Rene"
+
 POST {{ daprHttp }}/v1.0/actors/HelloWorldActor/{{ actorId }}/method/SayHelloWorld
 
 
@@ -82,19 +88,29 @@ Content-Type: application/json
     }
 ]
 
-### Get Dapr actor info
-GET {{ daprHttp }}/dapr/config
+### ------------
+### Reset snooze for TimerActor
+POST {{ daprHttp }}/v1.0/actors/TimerActor/alarmclock1/method/ResetSnoozeCount
+
+
+### Create Timer
+POST {{ daprHttp }}/v1.0/actors/TimerActor/alarmclock1/method/CreateTimer
 dapr-app-id: basic-actor-demos
 
+### Delete Timer
+DELETE {{ daprHttp }}/v1.0/actors/TimerActor/alarmclock1/timers/snooze
+dapr-app-id: basic-actor-demos
+
+### ------------
 ### Set Reminder
-@actorId=alarmclock1
+@actorId=alarmclock2
 POST {{ daprHttp }}/v1.0/actors/ReminderActor/{{ actorId }}/reminders/snooze
 dapr-app-id: basic-actor-demos
 Content-Type: application/json
 
 {
     "dueTime" : "0h0m3s0ms",
-    "period" : "R3/P0Y0M0W0DT0H05M0S"
+    "period" : "R3/P0Y0M0W0DT0H01M0S"
 }
 
 
