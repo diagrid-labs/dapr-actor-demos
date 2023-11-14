@@ -7,6 +7,7 @@ builder.Services.AddActors(options =>
     options.Actors.RegisterActor<BasicActorSamples.Actors.StatefulActor>();
     options.Actors.RegisterActor<BasicActorSamples.Actors.TimerActor>();
     options.Actors.RegisterActor<BasicActorSamples.Actors.ReminderActor>();
+    options.Actors.RegisterActor<BasicActorSamples.Actors.ActorToActor>();
 });
 
 var app = builder.Build();

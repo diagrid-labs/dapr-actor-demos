@@ -9,10 +9,12 @@ dapr-app-id: basic-actor-demos
 ### Say Hello World
 
 POST {{ daprHttp }}/v1.0/actors/HelloWorldActor/user1/method/SayHelloWorld
+dapr-app-id: basic-actor-demos
 
 
 ### Say hello with an input
 POST {{ daprHttp }}/v1.0/actors/HelloWorldActor/user2/method/SayHello
+dapr-app-id: basic-actor-demos
 Content-Type: application/json
 
 "Rene"
@@ -23,15 +25,18 @@ Content-Type: application/json
 ### Fails when key is not found
 
 GET {{ daprHttp }}/v1.0/actors/StatefulActor/user2/method/GetGreeting
+dapr-app-id: basic-actor-demos
 
 ### Set the greeting for the actor with ID user2
 POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/method/SetGreeting
+dapr-app-id: basic-actor-demos
 Content-Type: application/json
 
 "Hello from StatefulActor!"
 
 ### Set the greeting using state endpoint for the actor with ID user2
 POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state
+dapr-app-id: basic-actor-demos
 Content-Type: application/json
 
 [
@@ -46,10 +51,12 @@ Content-Type: application/json
 
 ### Get the greeting using state endpoint for the actor with ID user2
 GET {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state/greeting
+dapr-app-id: basic-actor-demos
 
 
 ### Set two keys using state endpoint for the actor with ID user2
 POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state
+dapr-app-id: basic-actor-demos
 Content-Type: application/json
 
 [
@@ -71,6 +78,7 @@ Content-Type: application/json
 
 ### Set one key, delete anotther using state endpoint for the actor with ID Alex
 POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state
+dapr-app-id: basic-actor-demos
 Content-Type: application/json
 
 [
@@ -93,6 +101,7 @@ Content-Type: application/json
 
 ### Reset snooze for TimerActor
 POST {{ daprHttp }}/v1.0/actors/TimerActor/alarmclock1/method/ResetSnoozeCount
+dapr-app-id: basic-actor-demos
 
 
 ### Create Timer
@@ -125,8 +134,17 @@ dapr-app-id: basic-actor-demos
 
 ### Reset the snooze count
 POST {{ daprHttp }}/v1.0/actors/ReminderActor/alarmclock2/method/ResetSnoozeCount
-
+dapr-app-id: basic-actor-demos
 
 ### Delete Reminder
 DELETE {{ daprHttp }}/v1.0/actors/ReminderActor/alarmclock2/reminders/snooze
 dapr-app-id: basic-actor-demos
+
+### --- Actor to Actor ---
+
+### Call the HelloWorldActor from ActorToActor
+POST {{ daprHttp }}/v1.0/actors/ActorToActor/id1/method/CallHelloWorld
+dapr-app-id: basic-actor-demos
+Content-Type: application/json
+
+"helloWorldId1"
