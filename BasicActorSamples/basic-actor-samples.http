@@ -4,33 +4,34 @@
 GET {{ daprHttp }}/dapr/config
 dapr-app-id: basic-actor-demos
 
+### --- Methods ---
 
 ### Say Hello World
-@actorId="Rene"
 
-POST {{ daprHttp }}/v1.0/actors/HelloWorldActor/{{ actorId }}/method/SayHelloWorld
+POST {{ daprHttp }}/v1.0/actors/HelloWorldActor/user1/method/SayHelloWorld
 
 
 ### Say hello with an input
-@actorId={{$guid}}
-POST {{ daprHttp }}/v1.0/actors/HelloWorldActor/{{ actorId }}/method/SayHello
+POST {{ daprHttp }}/v1.0/actors/HelloWorldActor/user2/method/SayHello
 Content-Type: application/json
 
 "Rene"
 
-### Get the saved greeting for the actor with ID Alex
-@actorId=Alex
+### --- State ---
 
-GET {{ daprHttp }}/v1.0/actors/StatefulActor/{{ actorId }}/method/GetGreeting
+### Get the saved greeting for the actor with ID user2
+### Fails when key is not found
 
-### Set the greeting for the actor with ID Alex
-POST {{ daprHttp }}/v1.0/actors/StatefulActor/{{ actorId }}/method/SetGreeting
+GET {{ daprHttp }}/v1.0/actors/StatefulActor/user2/method/GetGreeting
+
+### Set the greeting for the actor with ID user2
+POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/method/SetGreeting
 Content-Type: application/json
 
 "Hello from StatefulActor!"
 
-### Set the greeting using state endpoint for the actor with ID Alex
-POST {{ daprHttp }}/v1.0/actors/StatefulActor/{{ actorId }}/state
+### Set the greeting using state endpoint for the actor with ID user2
+POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state
 Content-Type: application/json
 
 [
@@ -43,12 +44,12 @@ Content-Type: application/json
     }
 ]
 
-### Get the greeting using state endpoint for the actor with ID Alex
-GET {{ daprHttp }}/v1.0/actors/StatefulActor/{{ actorId }}/state/greeting
+### Get the greeting using state endpoint for the actor with ID user2
+GET {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state/greeting
 
 
-### Set two keys using state endpoint for the actor with ID Alex
-POST {{ daprHttp }}/v1.0/actors/StatefulActor/{{ actorId }}/state
+### Set two keys using state endpoint for the actor with ID user2
+POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state
 Content-Type: application/json
 
 [
@@ -69,7 +70,7 @@ Content-Type: application/json
 ]
 
 ### Set one key, delete anotther using state endpoint for the actor with ID Alex
-POST {{ daprHttp }}/v1.0/actors/StatefulActor/{{ actorId }}/state
+POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state
 Content-Type: application/json
 
 [
@@ -88,7 +89,8 @@ Content-Type: application/json
     }
 ]
 
-### ------------
+### --- Timers ---
+
 ### Reset snooze for TimerActor
 POST {{ daprHttp }}/v1.0/actors/TimerActor/alarmclock1/method/ResetSnoozeCount
 
@@ -97,26 +99,34 @@ POST {{ daprHttp }}/v1.0/actors/TimerActor/alarmclock1/method/ResetSnoozeCount
 POST {{ daprHttp }}/v1.0/actors/TimerActor/alarmclock1/method/CreateTimer
 dapr-app-id: basic-actor-demos
 
+
 ### Delete Timer
 DELETE {{ daprHttp }}/v1.0/actors/TimerActor/alarmclock1/timers/snooze
 dapr-app-id: basic-actor-demos
 
-### ------------
+
+### --- Reminders ---
+
 ### Set Reminder
-@actorId=alarmclock2
-POST {{ daprHttp }}/v1.0/actors/ReminderActor/{{ actorId }}/reminders/snooze
+POST {{ daprHttp }}/v1.0/actors/ReminderActor/alarmclock2/reminders/snooze
 dapr-app-id: basic-actor-demos
 Content-Type: application/json
 
 {
     "dueTime" : "0h0m3s0ms",
-    "period" : "R3/P0Y0M0W0DT0H01M0S"
+    "period" : "R3/P0Y0M0W0DT0H0M10S"
 }
 
 
-### Get the greeting using state endpoint for the actor with ID Alex
-GET {{ daprHttp }}/v1.0/actors/ReminderActor/{{ actorId }}/state/snoozecount
+### Get the greeting using state endpoint for the actor with ID alarmclock2
+GET {{ daprHttp }}/v1.0/actors/ReminderActor/alarmclock2/state/snoozecount
 dapr-app-id: basic-actor-demos
 
+
 ### Reset the snooze count
-POST {{ daprHttp }}/v1.0/actors/ReminderActor/{{ actorId }}/method/ResetSnoozeCount
+POST {{ daprHttp }}/v1.0/actors/ReminderActor/alarmclock2/method/ResetSnoozeCount
+
+
+### Delete Reminder
+DELETE {{ daprHttp }}/v1.0/actors/ReminderActor/alarmclock2/reminders/snooze
+dapr-app-id: basic-actor-demos
