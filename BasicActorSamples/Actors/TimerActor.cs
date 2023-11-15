@@ -29,11 +29,6 @@ namespace BasicActorSamples.Actors
                 TimeSpan.FromSeconds(5));
         }
 
-        public async Task ResetSnoozeCount()
-        {
-            await StateManager.SetStateAsync(SNOOZE_COUNT_KEY, 0);
-        }
-
         public async Task SnoozeHandler(byte[] data)
         {
             Console.WriteLine($"{TIMER_NAME} received from timer!");
@@ -46,6 +41,10 @@ namespace BasicActorSamples.Actors
             }
             await StateManager.SetStateAsync(SNOOZE_COUNT_KEY, count);
             Console.WriteLine($"{Encoding.UTF8.GetString(data)} {count}");
+        }
+        public async Task ResetSnoozeCount()
+        {
+            await StateManager.SetStateAsync(SNOOZE_COUNT_KEY, 0);
         }
     }
 }

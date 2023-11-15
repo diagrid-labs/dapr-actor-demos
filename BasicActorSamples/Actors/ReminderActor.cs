@@ -17,11 +17,6 @@ namespace BasicActorSamples.Actors
         {
         }
 
-        public async Task ResetSnoozeCount()
-        {
-            await StateManager.SetStateAsync(SNOOZE_COUNT_KEY, 0);
-        }
-
         public async Task ReceiveReminderAsync(string reminderName, byte[] state, TimeSpan dueTime, TimeSpan period)
         {
             if (reminderName == REMINDER_NAME)
@@ -35,6 +30,10 @@ namespace BasicActorSamples.Actors
                 }
                 await StateManager.SetStateAsync(SNOOZE_COUNT_KEY, count);
             }
+        }
+        public async Task ResetSnoozeCount()
+        {
+            await StateManager.SetStateAsync(SNOOZE_COUNT_KEY, 0);
         }
     }
 }
