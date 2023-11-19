@@ -53,7 +53,18 @@ namespace EvilCorp.Web
             var headQuartersProxy = ProxyFactory.CreateActorProxy<IHeadQuarters>(
                 new ActorId(regionalOfficeData.HeadQuartersId),
                 nameof(HeadQuartersActor));
-            await headQuartersProxy.FireEmployeeAsync(employeeId);
+            await headQuartersProxy.FireEmployeeAsync(Id.GetId(), employeeId);
+        }
+
+        public async Task<string[]> GetEmployeeIdsAsync()
+        {
+            var regionalOfficeData = await GetRegionalOfficeDataAsync();
+            var headQuartersId = new ActorId(regionalOfficeData.HeadQuartersId);
+            var headQuartersProxy = ProxyFactory.CreateActorProxy<IHeadQuarters>(
+                headQuartersId,
+                nameof(HeadQuartersActor));
+
+            return await headQuartersProxy.GetEmployeeIdsForRegionalOfficeAsync(Id.GetId());
         }
     }
 }

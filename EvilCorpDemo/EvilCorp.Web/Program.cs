@@ -1,4 +1,8 @@
 
+using Dapr.Actors;
+using Dapr.Actors.Client;
+using Dapr.Client;
+using EvilCorp.Interfaces;
 using EvilCorp.Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,25 +15,37 @@ builder.Services.AddActors(options =>
     options.Actors.RegisterActor<AlarmDeviceActor>();
     options.Actors.RegisterActor<EmployeeActor>();
     options.Actors.RegisterActor<SimulationActor>();
+    options.ReentrancyConfig = new Dapr.Actors.ActorReentrancyConfig()
+    {
+        Enabled = true,
+        MaxStackDepth = 32,
+    };
 });
 
 var app = builder.Build();
+var daprClient = new DaprClientBuilder().Build();
+var proxyFactory = new ActorProxyFactory();
+var simulationProxy = proxyFactory.CreateActorProxy<ISimulation>(
+    new ActorId("simulation"),
+    nameof(SimulationActor));
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 // app.UseHttpsRedirection(); Don't use this, this middleware blocks Dapr calls
-app.UseStaticFiles();
 
-app.UseRouting();
+app.MapActorsHandlers();
 
-// app.UseAuthorization();
+app.MapPost("/init", () => {
+    simulationProxy.InitActors();
+});
 
-// app.MapRazorPages();
+app.MapPost("/increment", () => {
+    simulationProxy.IncrementTime();
+});
 
 app.Run();

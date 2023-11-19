@@ -6,8 +6,9 @@ namespace EvilCorp.Interfaces
     {
         Task SetRegionalOfficeIdsAsync(string[] localOfficeIds);
         Task<string[]> GetRegionalOfficeIdsAsync();
-        Task SetEmployeeIdsAsync(IEnumerable<string> employeeIds);
-        Task<string[]> GetEmployeeIdsAsync();
-        Task FireEmployeeAsync(string employeeId);
+        Task SetEmployeeIdsAsync(Dictionary<string, string[]> employeeIds);
+        Task<Dictionary<string,string[]>> GetEmployeeIdsAsync();
+        Task<string[]> GetEmployeeIdsForRegionalOfficeAsync(string regionalOfficeId);
+        Task FireEmployeeAsync(string regionalOfficeId, string employeeId);
     }
 }

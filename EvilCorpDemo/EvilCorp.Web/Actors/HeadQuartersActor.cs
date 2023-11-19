@@ -22,22 +22,33 @@ namespace EvilCorp.Web
             return await StateManager.GetStateAsync<string[]>(REGIONAL_OFFICE_IDS_KEY);
         }
 
-        public async Task SetEmployeeIdsAsync(IEnumerable<string> employeeIds)
+        public async Task SetEmployeeIdsAsync(Dictionary<string, string[]> employeeIds)
         {
             await StateManager.SetStateAsync(EMPLOYEE_IDS_KEY, employeeIds);
         }
 
-        public async Task<string[]> GetEmployeeIdsAsync()
+        public async Task<Dictionary<string, string[]>> GetEmployeeIdsAsync()
         {
-            return await StateManager.GetStateAsync<string[]>(EMPLOYEE_IDS_KEY);
+            return await StateManager.GetStateAsync<Dictionary<string, string[]>>(EMPLOYEE_IDS_KEY);
         }
 
-        public async Task FireEmployeeAsync(string employeeId)
+        public async Task FireEmployeeAsync(string regionalOfficeId, string employeeId)
         {
-            Console.WriteLine("Firing employee {EmployeeId}!", employeeId);
+            Console.WriteLine("Firing employee {EmployeeId} at {RegionalOfficeId}!", employeeId, regionalOfficeId);
+
             var employeeIds = await GetEmployeeIdsAsync();
-            var employeesMinusFired = employeeIds.Where(emp => emp != employeeId);
-            await SetEmployeeIdsAsync(employeesMinusFired);
+            Console.WriteLine("Employee count before: {}", employeeIds.Values.Count);
+            var employeesMinusFired = employeeIds[regionalOfficeId].Where(emp => emp != employeeId);
+            employeeIds[regionalOfficeId] = employeesMinusFired.ToArray();
+            await SetEmployeeIdsAsync(employeeIds);
+
+            Console.WriteLine("Employee count after: {}", employeeIds.Values.Count);
+        }
+
+        public async Task<string[]> GetEmployeeIdsForRegionalOfficeAsync(string regionalOfficeId)
+        {
+            var employeeIds = await GetEmployeeIdsAsync();
+            return employeeIds[regionalOfficeId];
         }
     }
 }

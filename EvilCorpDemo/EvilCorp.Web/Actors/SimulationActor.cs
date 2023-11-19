@@ -21,9 +21,17 @@ namespace EvilCorp.Web
             // At 1:00 UTC regional office will sync the time with all the AlarmDevices
             var utcSyncTime = new TimeOnly(1,0);
             await StateManager.SetStateAsync(UTC_TIME_KEY, utcSyncTime);
+            
+            var globalEmployeeIdList = new Dictionary<string, string[]>();
 
-            await AddRegionalOffice("London", "GMT Standard Time", headQuartersId, 10, utcSyncTime);
-            await AddRegionalOffice("New York", "Eastern Standard Time", headQuartersId, 10, utcSyncTime);
+            var londonRegionId = "London";
+            var londonEmployeeIds = await AddRegionalOffice(londonRegionId, "GMT Standard Time", headQuartersId, 2, utcSyncTime);
+            var newYorkRegionId = "New York";
+            var newYorkEmployeeIds = await AddRegionalOffice(newYorkRegionId, "Eastern Standard Time", headQuartersId, 2, utcSyncTime);
+            globalEmployeeIdList.Add(londonRegionId, londonEmployeeIds);
+            globalEmployeeIdList.Add(newYorkRegionId, newYorkEmployeeIds);
+
+            await hqProxy.SetEmployeeIdsAsync(globalEmployeeIdList);
 
             await Task.CompletedTask;
         }
@@ -35,7 +43,7 @@ namespace EvilCorp.Web
             await StateManager.SetStateAsync(UTC_TIME_KEY, incrementedTime);
         }
 
-        private async Task AddRegionalOffice(string regionalOfficeName, string timeZoneName, ActorId headQuartersId, int employeeCount, TimeOnly utcSyncTime)
+        private async Task<string[]> AddRegionalOffice(string regionalOfficeName, string timeZoneName, ActorId headQuartersId, int employeeCount, TimeOnly utcSyncTime)
         {
             var regionalOfficeId = new ActorId(regionalOfficeName);
             var regionalOfficeProxy = ProxyFactory.CreateActorProxy<IRegionalOffice>(regionalOfficeId, nameof(RegionalOfficeActor));
@@ -45,22 +53,31 @@ namespace EvilCorp.Web
             var regionalOfficeData = new RegionalOfficeData(timeZone, headQuartersId.GetId(), wakeUpTime);
             await regionalOfficeProxy.SetRegionalOfficeDataAsync(regionalOfficeData);
 
-            await AddEmployeesAndAlarmDevices(employeeCount, utcSyncTime, regionalOfficeId.GetId(), regionalOfficeData);
+            var employeeAndAlarmDeviceIds = await AddEmployeesAndAlarmDevices(employeeCount, utcSyncTime, regionalOfficeId.GetId(), regionalOfficeData);
+            await regionalOfficeProxy.SetAlarmDeviceIdsAsync(employeeAndAlarmDeviceIds.alarmDeviceIds);
+
+            return employeeAndAlarmDeviceIds.employeeIds;
         }
 
-        private async Task AddEmployeesAndAlarmDevices(
+        private async Task<(string[] employeeIds, string[] alarmDeviceIds)> AddEmployeesAndAlarmDevices(
             int employeeCount,
             TimeOnly utcSyncTime,
             string regionalOfficeId,
             RegionalOfficeData regionalOfficeData)
         {
+            var employeeIdList = new List<string>();
+            var alarmDeviceIdList = new List<string>();
             for (int i = 0; i < employeeCount; i++)
             {
                 var employeeId = new ActorId($"Employee {i}");
                 var employeeProxy = ProxyFactory.CreateActorProxy<IEmployee>(employeeId, nameof(EmployeeActor));
+                Console.WriteLine("Created employee {EmployeeId}", employeeId.GetId());
+                employeeIdList.Add(employeeId.GetId());
 
                 var alarmDeviceId = new ActorId($"AlarmDevice {i}");
                 var alarmDeviceProxy = ProxyFactory.CreateActorProxy<IAlarmDevice>(alarmDeviceId, nameof(AlarmDeviceActor));
+                Console.WriteLine("Created alarm device {AlarmDeviceId}", alarmDeviceId.GetId());
+                alarmDeviceIdList.Add(alarmDeviceId.GetId());
 
                 await alarmDeviceProxy.SetAlarmDeviceDataAsync(
                     new AlarmDeviceData(
@@ -78,6 +95,8 @@ namespace EvilCorp.Web
                 var employeeData = new EmployeeData(alarmDeviceId.GetId());
                 await employeeProxy.SetEmployeeDataAsync(employeeData);
             }
+
+            return new (employeeIdList.ToArray(), alarmDeviceIdList.ToArray());
         }
     }
 }
