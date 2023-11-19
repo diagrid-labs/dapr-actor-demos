@@ -34,15 +34,15 @@ namespace EvilCorp.Web
 
         public async Task FireEmployeeAsync(string regionalOfficeId, string employeeId)
         {
-            Console.WriteLine("Firing employee {EmployeeId} at {RegionalOfficeId}!", employeeId, regionalOfficeId);
+            Logger.LogInformation("Firing employee {EmployeeId} at {RegionalOfficeId}!", employeeId, regionalOfficeId);
 
             var employeeIds = await GetEmployeeIdsAsync();
-            Console.WriteLine("Employee count before: {}", employeeIds.Values.Count);
+            Logger.LogInformation("Employee count before: {}", employeeIds.Values.Count);
             var employeesMinusFired = employeeIds[regionalOfficeId].Where(emp => emp != employeeId);
             employeeIds[regionalOfficeId] = employeesMinusFired.ToArray();
             await SetEmployeeIdsAsync(employeeIds);
 
-            Console.WriteLine("Employee count after: {}", employeeIds.Values.Count);
+            Logger.LogInformation("Employee count after: {}", employeeIds.Values.Count);
         }
 
         public async Task<string[]> GetEmployeeIdsForRegionalOfficeAsync(string regionalOfficeId)

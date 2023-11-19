@@ -48,7 +48,7 @@ namespace EvilCorp.Web
         private async Task SnoozeHandler()
         {
             var alarmDeviceData = await GetAlarmDeviceDataAsync();
-            Console.WriteLine("WAKE UP AND GO TO WORK {EmployeeId}!", alarmDeviceData.EmployeeId);
+            Logger.LogInformation("WAKE UP AND GO TO WORK {AlarmDeviceId}!", Id.GetId());
 
             int snoozeCount = 0;
             var snoozeCountResult = await StateManager.TryGetStateAsync<int>(SNOOZE_COUNT_KEY);
@@ -61,12 +61,12 @@ namespace EvilCorp.Web
                     var regionalOfficeActorProxy = ProxyFactory.CreateActorProxy<IRegionalOffice>(
                         regionalOfficeActorId,
                         nameof(RegionalOfficeActor));
-                    await regionalOfficeActorProxy.FireEmployeeAsync(alarmDeviceData.EmployeeId);
+                    await regionalOfficeActorProxy.FireEmployeeAsync(Id.GetId());
                     await StopAlarmAsync();
                 }
                 else
                 {
-                    Console.WriteLine("Snoozing for {ActorId}", Id);
+                    Logger.LogInformation("Snoozing for {ActorId}", Id);
                     snoozeCount++;
                     await StateManager.SetStateAsync(SNOOZE_COUNT_KEY, snoozeCount);
                 }
@@ -80,7 +80,7 @@ namespace EvilCorp.Web
 
         public async Task SetTimeAsync(TimeOnly time)
         {
-            Console.WriteLine("Setting time for {AlarmDeviceActorId} to {Time}", Id, time);
+            Logger.LogInformation("Setting time for {AlarmDeviceActorId} to {Time}", Id, time);
 
             await StateManager.SetStateAsync(TIME_KEY, time);
             await RegisterTimerAsync(
@@ -97,7 +97,7 @@ namespace EvilCorp.Web
             var incrementedTime = time.AddMinutes(5);
             await StateManager.SetStateAsync(TIME_KEY, incrementedTime);
 
-            Console.WriteLine("Incremented time for {AlarmDeviceActorId} to {time}", Id, incrementedTime);
+            Logger.LogInformation("Incremented time for {AlarmDeviceActorId} to {time}", Id, incrementedTime);
 
             var alarmDeviceData = await GetAlarmDeviceDataAsync();
             var isAlarmTriggered = await GetIsAlarmTriggeredAsync();

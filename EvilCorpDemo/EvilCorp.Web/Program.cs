@@ -23,11 +23,6 @@ builder.Services.AddActors(options =>
 });
 
 var app = builder.Build();
-var daprClient = new DaprClientBuilder().Build();
-var proxyFactory = new ActorProxyFactory();
-var simulationProxy = proxyFactory.CreateActorProxy<ISimulation>(
-    new ActorId("simulation"),
-    nameof(SimulationActor));
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -37,15 +32,20 @@ if (!app.Environment.IsDevelopment())
 }
 
 // app.UseHttpsRedirection(); Don't use this, this middleware blocks Dapr calls
-
 app.MapActorsHandlers();
 
-app.MapPost("/init", () => {
-    simulationProxy.InitActors();
+var proxyFactory = new ActorProxyFactory();
+var simulationActorId = new ActorId("simulation");
+var simulationProxy = proxyFactory.CreateActorProxy<ISimulation>(
+    simulationActorId,
+    nameof(SimulationActor));
+
+app.MapPost("/init", async () => {
+    await simulationProxy.InitActorsAsync();
 });
 
-app.MapPost("/increment", () => {
-    simulationProxy.IncrementTime();
+app.MapPost("/increment", async () => {
+    await simulationProxy.IncrementTimeAsync();
 });
 
 app.Run();

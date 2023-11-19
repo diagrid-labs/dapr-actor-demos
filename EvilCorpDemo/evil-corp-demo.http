@@ -1,12 +1,10 @@
 @daprHttp=http://localhost:3500
-@gameId=game1
+@appHttp=http://localhost:7100
+@simulationId=simulation1
 
-POST {{ daprHttp }}/v1.0/actors/GameActor/{{ game1 }}/method/StartNewGame
-Content-Type: application/json
+### Initialize the simulation
+POST {{appHttp}}/init
 
-{
-    "Name": "Game 1"
-    "AreaSize": 10
-}
+### Increment the time
+POST {{appHttp}}/increment
 
-GET {{ daprHttp }}/v1.0/actors/GameActor/{{ game1 }}/method/StartNewGame

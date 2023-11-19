@@ -6,12 +6,32 @@ namespace EvilCorp.Interfaces
     {
         Task SetRegionalOfficeDataAsync(RegionalOfficeData regionalOfficeData);
         Task<RegionalOfficeData> GetRegionalOfficeDataAsync();
-        Task SetAlarmDeviceIdsAsync(IEnumerable<string> employeeIds);
-        Task<string[]> GetAlarmDeviceIdsAsync();
+        Task SetAlarmDeviceEmployeeMappingAsync(Dictionary<string, string> employeeIds);
+        Task<Dictionary<string, string>> GetAlarmDeviceEmployeeMappingAsync();
         Task<string[]> GetEmployeeIdsAsync();
         Task TriggerAlarmDevicesAsync();
-        Task FireEmployeeAsync(string employeeId);
+        Task FireEmployeeAsync(string alarmDeviceId);
     }
 
-    public record RegionalOfficeData(TimeZoneInfo TimeZone, string HeadQuartersId, TimeOnly WakeUpTime);
+    public class RegionalOfficeData
+    {
+        public RegionalOfficeData()
+        {
+        }
+
+        public RegionalOfficeData(string id, string timeZoneId, string headQuartersId, TimeOnly utcSyncTime, TimeOnly wakeUpTime)
+        {
+            Id = id;
+            TimeZoneId = timeZoneId;
+            HeadQuartersId = headQuartersId;
+            UtcSyncTime = utcSyncTime;
+            WakeUpTime = wakeUpTime;
+        }
+
+        public string Id { get; init;}
+        public string TimeZoneId { get; init; }
+        public string HeadQuartersId { get; init; }
+        public TimeOnly UtcSyncTime { get; init; }
+        public TimeOnly WakeUpTime { get; init; }
+    }
 }

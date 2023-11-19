@@ -10,5 +10,18 @@ namespace EvilCorp.Interfaces
         Task AcknowledgeAlarmAsync();
     }
 
-    public record EmployeeData(string AlarmDeviceId);
+    public class EmployeeData
+    {
+        public EmployeeData()
+        {
+            
+        }
+
+        public EmployeeData(string alarmDeviceId)
+        {
+            AlarmDeviceId = alarmDeviceId;
+        }
+
+        public string AlarmDeviceId { get; init; }
+    }
 }
