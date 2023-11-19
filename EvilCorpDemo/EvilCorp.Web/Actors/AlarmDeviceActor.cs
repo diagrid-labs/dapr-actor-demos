@@ -78,11 +78,12 @@ namespace EvilCorp.Web
             }
         }
 
-        public async Task SetTimeAsync(TimeOnly time)
+        public async Task SetTimeAsync(DateTime time)
         {
             Logger.LogInformation("Setting time for {AlarmDeviceActorId} to {Time}", Id, time);
 
             await StateManager.SetStateAsync(TIME_KEY, time);
+
             await RegisterTimerAsync(
                 TIME_TIMER_NAME,
                 nameof(IncrementTimeHandler),
@@ -117,9 +118,9 @@ namespace EvilCorp.Web
             await StateManager.SetStateAsync(IS_ALARM_TRIGGERED_KEY, isAlarmTriggered);
         }
 
-        private async Task<TimeOnly> GetTime()
+        private async Task<DateTime> GetTime()
         {
-            return await StateManager.GetStateAsync<TimeOnly>(TIME_KEY);
+            return await StateManager.GetStateAsync<DateTime>(TIME_KEY);
         }
     }
 }

@@ -19,7 +19,12 @@ namespace EvilCorp.Interfaces
         {
         }
 
-        public RegionalOfficeData(string id, string timeZoneId, string headQuartersId, TimeOnly utcSyncTime, TimeOnly wakeUpTime)
+        public RegionalOfficeData(
+            string id,
+            string timeZoneId,
+            string headQuartersId,
+            DateTime utcSyncTime,
+            DateTime wakeUpTime)
         {
             Id = id;
             TimeZoneId = timeZoneId;
@@ -31,7 +36,7 @@ namespace EvilCorp.Interfaces
         public string Id { get; init;}
         public string TimeZoneId { get; init; }
         public string HeadQuartersId { get; init; }
-        public TimeOnly UtcSyncTime { get; init; }
-        public TimeOnly WakeUpTime { get; init; }
+        public DateTime UtcSyncTime { get; init; }
+        public DateTime WakeUpTime { get; init; }
     }
 }

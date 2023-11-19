@@ -20,26 +20,25 @@ namespace EvilCorp.Web
             var hqProxy = ProxyFactory.CreateActorProxy<IHeadQuarters>(headQuartersId, nameof(HeadQuartersActor));
 
             // At 3:00 UTC regional offices will sync the time with all the AlarmDevices
-            var utcSyncTime = new TimeOnly(3, 0);
+            var utcSyncTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 3, 0, 0);
             Logger.LogInformation("Setting UTC time to {UtcSyncTime}", utcSyncTime);
             await StateManager.SetStateAsync(UTC_TIME_KEY, utcSyncTime);
-            Logger.LogInformation("Completed UTC time to {UtcSyncTime}", utcSyncTime);
 
             var globalEmployeeIdList = new Dictionary<string, string[]>();
-            var regionalWakeUpTime = new TimeOnly(7, 0);
+            
+            var regionalWakeUpTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 7, 0, 0);
 
             var londonOfficeData = new RegionalOfficeData("London", "GMT Standard Time", headQuartersId.GetId(), utcSyncTime, regionalWakeUpTime);
-            var londonOfficeProxy = await AddRegionalOffice(londonOfficeData, new Range(1, 2));
+            var londonOfficeProxy = await AddRegionalOffice(londonOfficeData, new Range(1, 3));
             var londonEmployeeIds = (await londonOfficeProxy.GetAlarmDeviceEmployeeMappingAsync()).Values.ToArray();
             Logger.LogInformation("London employee IDs: {LondonEmployeeIds}", string.Join(", ", londonEmployeeIds));
-
-            var newYorkOfficeData = new RegionalOfficeData("New York", "Eastern Standard Time", headQuartersId.GetId(), utcSyncTime, regionalWakeUpTime);
-            var newYorkOfficeProxy = await AddRegionalOffice(newYorkOfficeData, new Range(2, 3));
-            var newYorkEmployeeIds = (await newYorkOfficeProxy.GetAlarmDeviceEmployeeMappingAsync()).Values.ToArray();
-            Logger.LogInformation("New York employee IDs: {NewYorkEmployeeIds}", string.Join(", ", newYorkEmployeeIds));
-
             globalEmployeeIdList.Add(londonOfficeData.Id, londonEmployeeIds);
-            globalEmployeeIdList.Add(newYorkOfficeData.Id, newYorkEmployeeIds);
+
+            // var newYorkOfficeData = new RegionalOfficeData("New York", "Eastern Standard Time", headQuartersId.GetId(), utcSyncTime, regionalWakeUpTime);
+            // var newYorkOfficeProxy = await AddRegionalOffice(newYorkOfficeData, new Range(3, 5));
+            // var newYorkEmployeeIds = (await newYorkOfficeProxy.GetAlarmDeviceEmployeeMappingAsync()).Values.ToArray();
+            // Logger.LogInformation("New York employee IDs: {NewYorkEmployeeIds}", string.Join(", ", newYorkEmployeeIds));
+            // globalEmployeeIdList.Add(newYorkOfficeData.Id, newYorkEmployeeIds);
 
             await hqProxy.SetEmployeeIdsAsync(globalEmployeeIdList);
 
@@ -90,13 +89,9 @@ namespace EvilCorp.Web
                         regionalOfficeData.WakeUpTime));
 
                 // Use the utcSyncTime and the TimeZoneInfo to set the regional time on the AlarmDevice.
-                var syncDate = DateOnly.FromDateTime(DateTime.Today);
-                var syncDateTime = syncDate.ToDateTime(regionalOfficeData.UtcSyncTime);
                 var timeZone = TimeZoneInfo.FindSystemTimeZoneById(regionalOfficeData.TimeZoneId);
-                var regionalSyncDateTime = TimeZoneInfo.ConvertTimeFromUtc(syncDateTime, timeZone);
-                var regionalSyncTime = TimeOnly.FromDateTime(regionalSyncDateTime);
-                await alarmDeviceProxy.SetTimeAsync(regionalSyncTime);
-
+                var regionalSyncDateTime = TimeZoneInfo.ConvertTimeFromUtc(regionalOfficeData.UtcSyncTime, timeZone);
+                await alarmDeviceProxy.SetTimeAsync(regionalSyncDateTime);
                 var employeeData = new EmployeeData(alarmDeviceId.GetId());
                 await employeeProxy.SetEmployeeDataAsync(employeeData);
             }

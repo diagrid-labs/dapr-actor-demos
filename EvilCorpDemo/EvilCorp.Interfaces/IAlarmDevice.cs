@@ -8,7 +8,7 @@ namespace EvilCorp.Interfaces
         Task<AlarmDeviceData> GetAlarmDeviceDataAsync();
         Task TriggerAlarmAsync();
         Task StopAlarmAsync();
-        Task SetTimeAsync(TimeOnly time);
+        Task SetTimeAsync(DateTime time);
     }
 
     public class AlarmDeviceData
@@ -17,13 +17,13 @@ namespace EvilCorp.Interfaces
         {
         }
 
-        public AlarmDeviceData(string regionalOfficeId, TimeOnly alarmTime)
+        public AlarmDeviceData(string regionalOfficeId, DateTime alarmTime)
         {
             RegionalOfficeId = regionalOfficeId;
             AlarmTime = alarmTime;
         }
 
         public string RegionalOfficeId { get; init; }
-        public TimeOnly AlarmTime { get; init; }
+        public DateTime AlarmTime { get; init; }
     }
 }
