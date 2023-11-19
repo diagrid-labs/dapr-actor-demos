@@ -7,6 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddActors(options =>
 {
     options.Actors.RegisterActor<HeadQuartersActor>();
+    options.Actors.RegisterActor<RegionalOfficeActor>();
+    options.Actors.RegisterActor<AlarmDeviceActor>();
+    options.Actors.RegisterActor<EmployeeActor>();
+    options.Actors.RegisterActor<SimulationActor>();
 });
 
 var app = builder.Build();
