@@ -13,5 +13,5 @@ namespace EvilCorp.Interfaces
     }
 
     public record Coordinate(double X, double Y);
-    public record RegionalOfficeData(string Name, TimeZoneInfo TimeZone, Coordinate Coordinate, string HeadQuartersId);
+    public record RegionalOfficeData(TimeZoneInfo TimeZone, string HeadQuartersId, TimeOnly WakeUpTime);
 }
