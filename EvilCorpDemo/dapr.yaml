@@ -9,5 +9,5 @@ apps:
     command: ["dotnet", "run"]
     appLogDestination: console
     daprdLogDestination: console
-    logLevel: debug
+    logLevel: info
     enableApiLogging: true
