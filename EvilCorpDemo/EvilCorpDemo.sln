@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvilCorp.Interfaces", "EvilCorp.Interfaces\EvilCorp.Interfaces.csproj", "{F268910A-F788-4835-A5C4-DF3069D33144}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvilCorp.Web", "EvilCorp.Web\EvilCorp.Web.csproj", "{B805AE19-39D9-4C53-99A7-550887FE3473}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F268910A-F788-4835-A5C4-DF3069D33144}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F268910A-F788-4835-A5C4-DF3069D33144}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F268910A-F788-4835-A5C4-DF3069D33144}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F268910A-F788-4835-A5C4-DF3069D33144}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B805AE19-39D9-4C53-99A7-550887FE3473}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B805AE19-39D9-4C53-99A7-550887FE3473}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B805AE19-39D9-4C53-99A7-550887FE3473}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B805AE19-39D9-4C53-99A7-550887FE3473}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EDEAE6BD-3CE2-4D16-8103-90E2748CCDD4}
+	EndGlobalSection
+EndGlobal
