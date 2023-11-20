@@ -28,16 +28,28 @@ namespace EvilCorp.Web
             return await StateManager.GetStateAsync<AlarmClockData>(ALARM_CLOCK_DATA_KEY);
         }
 
-        public async Task TriggerAlarmAsync()
+        private async Task TriggerAlarmAsync()
         {
             await RegisterTimerAsync(
                 ALARM_TIMER_NAME,
-                nameof(SnoozeHandler),
+                nameof(AlarmHandler),
                 null,
                 TimeSpan.FromSeconds(0),
-                TimeSpan.FromSeconds(5));
+                TimeSpan.FromSeconds(1));
 
             await SetIsAlarmTriggeredAsync(true);
+        }
+
+        public async Task SnoozeAlarmAsync()
+        {
+            int snoozeCount = 0;
+            var snoozeCountResult = await TryGetSnoozeCountAsync();
+            if (snoozeCountResult.HasValue)
+            {
+                snoozeCount++;
+            }
+            await SetSnoozeCountAsync(snoozeCount);
+            Logger.LogInformation("{ActorId} snoozeCount: {SnoozeCount}", Id, snoozeCount);
         }
 
         public async Task StopAlarmAsync()
@@ -45,58 +57,77 @@ namespace EvilCorp.Web
             await UnregisterTimerAsync(ALARM_TIMER_NAME);
         }
 
-        private async Task SnoozeHandler()
+        private async Task AlarmHandler()
         {
             var alarmClockData = await GetAlarmClockDataAsync();
-            Logger.LogInformation("WAKE UP AND GO TO WORK {AlarmClockId}!", Id.GetId());
+            Logger.LogInformation("{AlarmClockId}: WAKE UP AND GO TO WORK!", Id.GetId());
+            await CallEmployee(alarmClockData);
 
             int snoozeCount = 0;
-            var snoozeCountResult = await StateManager.TryGetStateAsync<int>(SNOOZE_COUNT_KEY);
+            var snoozeCountResult = await TryGetSnoozeCountAsync();
             if (snoozeCountResult.HasValue)
             {
                 if (snoozeCount == 3)
                 {
-                    // Employee will be fired
-                    var regionalOfficeActorId = new ActorId(alarmClockData.RegionalOfficeId);
-                    var regionalOfficeActorProxy = ProxyFactory.CreateActorProxy<IRegionalOffice>(
-                        regionalOfficeActorId,
-                        nameof(RegionalOfficeActor));
-                    await regionalOfficeActorProxy.FireEmployeeAsync(Id.GetId());
-                    await StopAlarmAsync();
-                }
-                else
-                {
-                    Logger.LogInformation("Snoozing for {ActorId}", Id);
-                    snoozeCount++;
-                    await StateManager.SetStateAsync(SNOOZE_COUNT_KEY, snoozeCount);
+                    Logger.LogInformation("{AlarmClockId}: Snooze limit exceeded. Employee will be fired.", Id.GetId());
+                    await FireEmployee(alarmClockData);
                 }
             }
             else
             {
-                // This is the first time the alarm has been triggered, snoozeCount = 0.
-                await StateManager.SetStateAsync(SNOOZE_COUNT_KEY, snoozeCount);
+                var timeSpan = TimeSpan.FromMinutes(30);
+                var absoluteLimit = alarmClockData.AlarmTime.Add(timeSpan);
+                if (absoluteLimit > await GetTimeAsync())
+                {
+                    Logger.LogInformation("{AlarmClockId}: Time limit exceeded. Employee will be fired.", Id.GetId());
+                    await FireEmployee(alarmClockData);
+                }
             }
         }
 
-        public async Task SetTimeAsync(DateTime time)
+        private async Task CallEmployee(AlarmClockData alarmClockData)
         {
-            Logger.LogInformation("Setting time for {AlarmClockId} to {Time}", Id, time);
+            var regionalOfficeActorId = new ActorId(alarmClockData.RegionalOfficeId);
+            var regionalOfficeActorProxy = ProxyFactory.CreateActorProxy<IRegionalOffice>(
+                regionalOfficeActorId,
+                nameof(RegionalOfficeActor));
+            var employeeId = await regionalOfficeActorProxy.GetEmployeeIdAsync(Id.GetId());
+            var employeeProxy = ProxyFactory.CreateActorProxy<IEmployee>(
+                new ActorId(employeeId),
+                nameof(EmployeeActor));
+            await employeeProxy.HandleAlarmAsync();
+        }
 
-            await StateManager.SetStateAsync(TIME_KEY, time);
+        private async Task FireEmployee(AlarmClockData alarmClockData)
+        {
+            var regionalOfficeActorId = new ActorId(alarmClockData.RegionalOfficeId);
+            var regionalOfficeActorProxy = ProxyFactory.CreateActorProxy<IRegionalOffice>(
+                regionalOfficeActorId,
+                nameof(RegionalOfficeActor));
+            await regionalOfficeActorProxy.FireEmployeeAsync(Id.GetId());
+            await StopAlarmAsync();
+        }
+
+        public async Task SetSyncTimeAsync(DateTime time)
+        {
+            await UnregisterReminderAsync(TIME_TIMER_NAME);
+
+            Logger.LogInformation("Setting time for {AlarmClockId} to {Time}", Id, time);
+            await SetTimeAsync(time);
 
             await RegisterTimerAsync(
                 TIME_TIMER_NAME,
                 nameof(IncrementTimeHandler),
                 null,
-                TimeSpan.FromSeconds(5),
-                TimeSpan.FromSeconds(5));
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(1));
         }
 
-        public async Task IncrementTimeHandler()
+        private async Task IncrementTimeHandler()
         {
-            var time = await GetTime();
+            var time = await GetTimeAsync();
             var incrementedTime = time.AddMinutes(5);
-            await StateManager.SetStateAsync(TIME_KEY, incrementedTime);
+            await SetTimeAsync(incrementedTime);
 
             Logger.LogInformation("Incremented time for {AlarmClockId} to {time}", Id, incrementedTime);
 
@@ -118,9 +149,24 @@ namespace EvilCorp.Web
             await StateManager.SetStateAsync(IS_ALARM_TRIGGERED_KEY, isAlarmTriggered);
         }
 
-        private async Task<DateTime> GetTime()
+        private async Task SetTimeAsync(DateTime time)
+        {
+            await StateManager.SetStateAsync(TIME_KEY, time);
+        }
+
+        private async Task<DateTime> GetTimeAsync()
         {
             return await StateManager.GetStateAsync<DateTime>(TIME_KEY);
+        }
+
+        private async Task SetSnoozeCountAsync(int snoozeCount)
+        {
+            await StateManager.SetStateAsync(SNOOZE_COUNT_KEY, snoozeCount);
+        }
+
+        private async Task<ConditionalValue<int>> TryGetSnoozeCountAsync()
+        {
+            return await StateManager.TryGetStateAsync<int>(SNOOZE_COUNT_KEY);
         }
     }
 }

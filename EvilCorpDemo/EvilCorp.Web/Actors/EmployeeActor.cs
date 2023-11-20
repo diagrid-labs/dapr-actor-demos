@@ -22,7 +22,27 @@ namespace EvilCorp.Web
             return await StateManager.GetStateAsync<EmployeeData>(EMPLOYEE_DATA_KEY);
         }
 
-        public async Task AcknowledgeAlarmAsync()
+        public async Task HandleAlarmAsync()
+        {
+            var random = new Random();
+            var outcome = random.Next(0, 3);
+            switch (outcome)
+            {
+                case 0:
+                    Logger.LogInformation("{ActorId} Acknowledging alarm", Id);
+                    await AcknowledgeAlarmAsync();
+                    break;
+                case 1:
+                    Logger.LogInformation("{ActorId} Snoozing alarm", Id);
+                    await SnoozeAlarmAsync();
+                    break;
+                default:
+                    Logger.LogInformation("{ActorId} Ignoring alarm", Id);
+                    break;
+            }
+        }
+
+        private async Task AcknowledgeAlarmAsync()
         {
             var employeeData = await GetEmployeeDataAsync();
             var alarmClockProxy = ProxyFactory.CreateActorProxy<IAlarmClock>(
@@ -31,9 +51,14 @@ namespace EvilCorp.Web
             await alarmClockProxy.StopAlarmAsync();
         }
 
-        public Task SnoozeAlarmAsync()
+        private async Task SnoozeAlarmAsync()
         {
-            throw new NotImplementedException();
+            var employeeData = await GetEmployeeDataAsync();
+            var alarmClockProxy = ProxyFactory.CreateActorProxy<IAlarmClock>(
+                new ActorId(employeeData.AlarmClockId),
+                nameof(AlarmClockActor));
+            await alarmClockProxy.SnoozeAlarmAsync();
+            
         }
     }
 }

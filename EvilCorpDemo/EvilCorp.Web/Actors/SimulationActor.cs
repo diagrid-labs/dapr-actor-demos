@@ -17,7 +17,7 @@ namespace EvilCorp.Web
             // Create the HeadQuarters actor
             Logger.LogInformation("Creating HeadQuarters actor");
             var headQuartersId = new ActorId("headquarters");
-            var hqProxy = ProxyFactory.CreateActorProxy<IHeadQuarters>(headQuartersId, nameof(HeadQuartersActor));
+            var headQuartersProxy = ProxyFactory.CreateActorProxy<IHeadQuarters>(headQuartersId, nameof(HeadQuartersActor));
 
             // At 3:00 UTC regional offices will sync the time with all the AlarmClocks
             var utcSyncTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 3, 0, 0);
@@ -40,7 +40,7 @@ namespace EvilCorp.Web
             // Logger.LogInformation("New York employee IDs: {NewYorkEmployeeIds}", string.Join(", ", newYorkEmployeeIds));
             // globalEmployeeIdList.Add(newYorkOfficeData.Id, newYorkEmployeeIds);
 
-            await hqProxy.SetEmployeeIdsAsync(globalEmployeeIdList);
+            await headQuartersProxy.SetEmployeeIdsAsync(globalEmployeeIdList);
 
             await Task.CompletedTask;
         }
@@ -62,6 +62,7 @@ namespace EvilCorp.Web
 
             var employeeAndAlarmClockIds = await AddAlarmClocksAndEmployees(employeeIds, regionalOfficeData);
             await regionalOfficeProxy.SetAlarmClockEmployeeMappingAsync(employeeAndAlarmClockIds);
+            await regionalOfficeProxy.SetAlarmClockTimeAsync(regionalOfficeData.UtcSyncTime);
 
             return regionalOfficeProxy;
         }
@@ -88,10 +89,6 @@ namespace EvilCorp.Web
                         regionalOfficeData.Id,
                         regionalOfficeData.WakeUpTime));
 
-                // Use the utcSyncTime and the TimeZoneInfo to set the regional time on the AlarmClock.
-                var timeZone = TimeZoneInfo.FindSystemTimeZoneById(regionalOfficeData.TimeZoneId);
-                var regionalSyncDateTime = TimeZoneInfo.ConvertTimeFromUtc(regionalOfficeData.UtcSyncTime, timeZone);
-                await alarmClockProxy.SetTimeAsync(regionalSyncDateTime);
                 var employeeData = new EmployeeData(alarmClockId.GetId());
                 await employeeProxy.SetEmployeeDataAsync(employeeData);
             }

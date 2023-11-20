@@ -6,9 +6,9 @@ namespace EvilCorp.Interfaces
     {
         Task SetAlarmClockDataAsync(AlarmClockData alarmClockData);
         Task<AlarmClockData> GetAlarmClockDataAsync();
-        Task TriggerAlarmAsync();
+        Task SnoozeAlarmAsync();
         Task StopAlarmAsync();
-        Task SetTimeAsync(DateTime time);
+        Task SetSyncTimeAsync(DateTime syncTime);
     }
 
     public class AlarmClockData

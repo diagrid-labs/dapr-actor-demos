@@ -33,9 +33,14 @@ namespace EvilCorp.Web
             return await StateManager.GetStateAsync<Dictionary<string, string>>(ALARM_CLOCK_EMPLOYEE_KEY);
         }
 
-        public async Task TriggerAlarmClocksAsync()
+        public async Task SetAlarmClockTimeAsync(DateTime utcSyncTime)
         {
-            Logger.LogInformation("Triggering alarm clocks for {Region}!", Id);
+            Logger.LogInformation("Setting alarm clocks for {Region}!", Id);
+
+            // Use the utcSyncTime and the TimeZoneInfo to set the regional time on the AlarmClock.
+            var regionalOfficeData = await GetRegionalOfficeDataAsync();
+            var timeZone = TimeZoneInfo.FindSystemTimeZoneById(regionalOfficeData.TimeZoneId);
+            var regionalSyncDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcSyncTime, timeZone);
 
             var mapping = await GetAlarmClockEmployeeMappingAsync();
             foreach (var alarmClockId in mapping.Keys)
@@ -43,18 +48,24 @@ namespace EvilCorp.Web
                 var alarmClockProxy = ProxyFactory.CreateActorProxy<IAlarmClock>(
                     new ActorId(alarmClockId),
                     nameof(AlarmClockActor));
-                await alarmClockProxy.TriggerAlarmAsync();
+                await alarmClockProxy.SetSyncTimeAsync(regionalSyncDateTime);
             }
+        }
+
+        public async Task<string> GetEmployeeIdAsync(string alarmClockId)
+        {
+            var mapping = await GetAlarmClockEmployeeMappingAsync();
+            var employeeId = mapping[alarmClockId];
+            return employeeId;
         }
 
         public async Task FireEmployeeAsync(string alarmClockId)
         {
+            var employeeId = await GetEmployeeIdAsync(alarmClockId);
             var regionalOfficeData = await GetRegionalOfficeDataAsync();
             var headQuartersProxy = ProxyFactory.CreateActorProxy<IHeadQuarters>(
                 new ActorId(regionalOfficeData.HeadQuartersId),
                 nameof(HeadQuartersActor));
-            var mapping = await GetAlarmClockEmployeeMappingAsync();
-            var employeeId = mapping[alarmClockId];
             await headQuartersProxy.FireEmployeeAsync(Id.GetId(), employeeId);
         }
 

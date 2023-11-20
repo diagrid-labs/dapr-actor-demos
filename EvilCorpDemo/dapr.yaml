@@ -10,4 +10,4 @@ apps:
     appLogDestination: console
     daprdLogDestination: console
     logLevel: info
-    enableApiLogging: true
+    enableApiLogging: false

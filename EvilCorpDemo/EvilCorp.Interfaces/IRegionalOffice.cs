@@ -9,7 +9,8 @@ namespace EvilCorp.Interfaces
         Task SetAlarmClockEmployeeMappingAsync(Dictionary<string, string> employeeIds);
         Task<Dictionary<string, string>> GetAlarmClockEmployeeMappingAsync();
         Task<string[]> GetEmployeeIdsAsync();
-        Task TriggerAlarmClocksAsync();
+        Task<string> GetEmployeeIdAsync(string alarmClockId);
+        Task SetAlarmClockTimeAsync(DateTime time);
         Task FireEmployeeAsync(string alarmClockId);
     }
 
