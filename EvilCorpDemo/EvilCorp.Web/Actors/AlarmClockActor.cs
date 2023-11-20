@@ -47,16 +47,15 @@ namespace EvilCorp.Web
             await UnregisterTimerAsync(TIME_TIMER_NAME);
         }
 
-        private async Task AlarmHandler()
+        private async Task AlarmHandler(AlarmClockData alarmClockData)
         {
-            var alarmClockData = await GetAlarmClockDataAsync();
             if (await IsActiveEmployee(alarmClockData))
             {
                 Logger.LogInformation("{AlarmClockId}: WAKE UP AND GO TO WORK!", Id.GetId());
                 await GetEmployeeResponseAndExecuteAsync(alarmClockData);
 
                 var snoozeCountResult = await TryGetSnoozeCountAsync();
-                if (snoozeCountResult.HasValue && snoozeCountResult.Value > alarmClockData.MaxSnoozeCount)
+                if (snoozeCountResult.HasValue && snoozeCountResult.Value > alarmClockData.MaxAllowedSnoozeCount)
                 {
                     Logger.LogInformation("{AlarmClockId}: Snooze limit exceeded. Employee will be fired!", Id.GetId());
                     await FireEmployee(alarmClockData);
@@ -71,10 +70,12 @@ namespace EvilCorp.Web
                 regionalOfficeActorId,
                 nameof(RegionalOfficeActor));
             var employeeId = await regionalOfficeActorProxy.GetEmployeeIdAsync(Id.GetId());
+
             var employeeProxy = ProxyFactory.CreateActorProxy<IEmployee>(
                 new ActorId(employeeId),
                 nameof(EmployeeActor));
             var responseMethod = await employeeProxy.GetAlarmResponseAsync();
+
             switch (responseMethod)
             {
                 case "StopTimersAsync":
@@ -128,16 +129,17 @@ namespace EvilCorp.Web
             {
                 return;
             }
+
             var alarmClockData = await GetAlarmClockDataAsync();
             var time = await GetTimeAsync();
-            var incrementedTime = time.AddMinutes(10);
+            var incrementedTime = time.AddMinutes(alarmClockData.TimeIncrementMinutes);
             await SetTimeAsync(incrementedTime);
 
             Logger.LogInformation("{AlarmClockId} Set time to {time}", Id, incrementedTime);
 
             if (incrementedTime >= alarmClockData.AlarmTime)
             {
-                await AlarmHandler();
+                await AlarmHandler(alarmClockData);
             }
         }
 

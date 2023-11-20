@@ -91,7 +91,8 @@ namespace EvilCorp.Web
                     new AlarmClockData(
                         regionalOfficeData.Id,
                         regionalWakeUpTime,
-                        3));
+                        timeIncrementMinutes: 10,
+                        maxAllowedSnoozeCount: 3));
 
                 var employeeData = new EmployeeData(alarmClockId.GetId());
                 await employeeProxy.SetEmployeeDataAsync(employeeData);
