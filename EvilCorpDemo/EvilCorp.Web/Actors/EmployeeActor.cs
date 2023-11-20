@@ -33,9 +33,9 @@ namespace EvilCorp.Web
                     await AcknowledgeAlarmAsync();
                     break;
                 case 1:
-                    Logger.LogInformation("{ActorId} Snoozing alarm", Id);
-                    await SnoozeAlarmAsync();
-                    break;
+                    //Logger.LogInformation("{ActorId} Snoozing alarm", Id);
+                    //await SnoozeAlarmAsync();
+                    //break;
                 default:
                     Logger.LogInformation("{ActorId} Ignoring alarm", Id);
                     break;
@@ -48,7 +48,7 @@ namespace EvilCorp.Web
             var alarmClockProxy = ProxyFactory.CreateActorProxy<IAlarmClock>(
                 new ActorId(employeeData.AlarmClockId),
                 nameof(AlarmClockActor));
-            await alarmClockProxy.StopAlarmAsync();
+            await alarmClockProxy.StopTimersAsync();
         }
 
         private async Task SnoozeAlarmAsync()
@@ -58,7 +58,6 @@ namespace EvilCorp.Web
                 new ActorId(employeeData.AlarmClockId),
                 nameof(AlarmClockActor));
             await alarmClockProxy.SnoozeAlarmAsync();
-            
         }
     }
 }

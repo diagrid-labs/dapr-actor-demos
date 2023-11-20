@@ -37,12 +37,9 @@ namespace EvilCorp.Web
             Logger.LogInformation("Firing employee {EmployeeId} at {RegionalOfficeId}!", employeeId, regionalOfficeId);
 
             var employeeIds = await GetEmployeeIdsAsync();
-            Logger.LogInformation("Employee count before: {}", employeeIds.Values.Count);
             var employeesMinusFired = employeeIds[regionalOfficeId].Where(emp => emp != employeeId);
             employeeIds[regionalOfficeId] = employeesMinusFired.ToArray();
             await SetEmployeeIdsAsync(employeeIds);
-
-            Logger.LogInformation("Employee count after: {}", employeeIds.Values.Count);
         }
 
         public async Task<string[]> GetEmployeeIdsForRegionalOfficeAsync(string regionalOfficeId)

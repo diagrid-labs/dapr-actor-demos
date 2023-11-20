@@ -33,6 +33,14 @@ namespace EvilCorp.Web
             return await StateManager.GetStateAsync<Dictionary<string, string>>(ALARM_CLOCK_EMPLOYEE_KEY);
         }
 
+        public async Task RemoveEmployeeAsync(string employeeId)
+        {
+            var mapping = await GetAlarmClockEmployeeMappingAsync();
+            var alarmClockEmployeeKey = mapping.FirstOrDefault(x => x.Value == employeeId).Key;
+            mapping.Remove(alarmClockEmployeeKey);
+            await SetAlarmClockEmployeeMappingAsync(mapping);
+        }
+
         public async Task SetAlarmClockTimeAsync(DateTime utcSyncTime)
         {
             Logger.LogInformation("Setting alarm clocks for {Region}!", Id);
@@ -55,18 +63,23 @@ namespace EvilCorp.Web
         public async Task<string> GetEmployeeIdAsync(string alarmClockId)
         {
             var mapping = await GetAlarmClockEmployeeMappingAsync();
-            var employeeId = mapping[alarmClockId];
-            return employeeId;
+            mapping.TryGetValue(alarmClockId, out string? employeeId);
+
+            return employeeId ?? string.Empty;
         }
 
         public async Task FireEmployeeAsync(string alarmClockId)
         {
             var employeeId = await GetEmployeeIdAsync(alarmClockId);
-            var regionalOfficeData = await GetRegionalOfficeDataAsync();
-            var headQuartersProxy = ProxyFactory.CreateActorProxy<IHeadQuarters>(
-                new ActorId(regionalOfficeData.HeadQuartersId),
-                nameof(HeadQuartersActor));
-            await headQuartersProxy.FireEmployeeAsync(Id.GetId(), employeeId);
+            if (employeeId != string.Empty)
+            {
+                var regionalOfficeData = await GetRegionalOfficeDataAsync();
+                var headQuartersProxy = ProxyFactory.CreateActorProxy<IHeadQuarters>(
+                    new ActorId(regionalOfficeData.HeadQuartersId),
+                    nameof(HeadQuartersActor));
+                await RemoveEmployeeAsync(employeeId);
+                await headQuartersProxy.FireEmployeeAsync(Id.GetId(), employeeId);
+            }
         }
 
         public async Task<string[]> GetEmployeeIdsAsync()

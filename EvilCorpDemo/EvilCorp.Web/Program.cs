@@ -15,10 +15,12 @@ builder.Services.AddActors(options =>
     options.Actors.RegisterActor<AlarmClockActor>();
     options.Actors.RegisterActor<EmployeeActor>();
     options.Actors.RegisterActor<SimulationActor>();
-    options.ReentrancyConfig = new Dapr.Actors.ActorReentrancyConfig()
+    options.ActorScanInterval = TimeSpan.FromSeconds(10);
+    options.ActorIdleTimeout = TimeSpan.FromMinutes(10);
+    options.ReentrancyConfig = new ActorReentrancyConfig()
     {
         Enabled = true,
-        MaxStackDepth = 32,
+        MaxStackDepth = 32
     };
 });
 
