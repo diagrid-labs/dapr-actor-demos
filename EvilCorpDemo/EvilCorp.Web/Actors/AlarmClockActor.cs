@@ -29,14 +29,14 @@ namespace EvilCorp.Web
 
         public async Task SnoozeAlarmAsync()
         {
-            Logger.LogInformation("{ActorId} Snoozing/ignoring alarm", Id);
+            Logger.LogInformation("{ActorId} Is snoozed", Id);
             int snoozeCount = 1;
             var snoozeCountResult = await TryGetSnoozeCountAsync();
             if (snoozeCountResult.HasValue)
             {
                 snoozeCount = snoozeCountResult.Value + 1;
             }
-            Logger.LogInformation("{ActorId} Snooze count is {SnoozeCount}", Id, snoozeCount);
+            Logger.LogInformation("{ActorId} Snooze count = {SnoozeCount}", Id, snoozeCount);
             await SetSnoozeCountAsync(snoozeCount);
         }
 
@@ -53,18 +53,10 @@ namespace EvilCorp.Web
             if (await IsActiveEmployee(alarmClockData))
             {
                 Logger.LogInformation("{AlarmClockId}: WAKE UP AND GO TO WORK!", Id.GetId());
-                await GetEmployeeResponseAsync(alarmClockData);
-
-                var absoluteLimit = alarmClockData.AlarmTime.Add(alarmClockData.MaxSnoozeTime);
-                var currentTime = await GetTimeAsync();
-                if (currentTime >= absoluteLimit)
-                {
-                    Logger.LogInformation("{AlarmClockId}: Time limit exceeded. Employee will be fired!", Id.GetId());
-                    await FireEmployee(alarmClockData);
-                }
+                await GetEmployeeResponseAndExecuteAsync(alarmClockData);
 
                 var snoozeCountResult = await TryGetSnoozeCountAsync();
-                if (snoozeCountResult.HasValue && snoozeCountResult.Value == 3)
+                if (snoozeCountResult.HasValue && snoozeCountResult.Value > alarmClockData.MaxSnoozeCount)
                 {
                     Logger.LogInformation("{AlarmClockId}: Snooze limit exceeded. Employee will be fired!", Id.GetId());
                     await FireEmployee(alarmClockData);
@@ -72,7 +64,7 @@ namespace EvilCorp.Web
             }
         }
 
-        private async Task GetEmployeeResponseAsync(AlarmClockData alarmClockData)
+        private async Task GetEmployeeResponseAndExecuteAsync(AlarmClockData alarmClockData)
         {
             var regionalOfficeActorId = new ActorId(alarmClockData.RegionalOfficeId);
             var regionalOfficeActorProxy = ProxyFactory.CreateActorProxy<IRegionalOffice>(

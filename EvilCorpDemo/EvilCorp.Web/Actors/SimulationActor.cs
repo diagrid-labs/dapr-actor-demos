@@ -86,15 +86,12 @@ namespace EvilCorp.Web
                 alarmClockEmployeeMapping.Add(alarmClockId.GetId(), employeeId.GetId());
 
                 var regionalWakeUpTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 7, 0, 0);
-                var snoozeInterval = TimeSpan.FromMinutes(10);
-                var maxSnoozeTime = TimeSpan.FromMinutes(30);
 
                 await alarmClockProxy.SetAlarmClockDataAsync(
                     new AlarmClockData(
                         regionalOfficeData.Id,
                         regionalWakeUpTime,
-                        snoozeInterval,
-                        maxSnoozeTime));
+                        3));
 
                 var employeeData = new EmployeeData(alarmClockId.GetId());
                 await employeeProxy.SetEmployeeDataAsync(employeeData);

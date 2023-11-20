@@ -34,7 +34,7 @@ namespace EvilCorp.Web
                     alarmClockMethod = "StopTimersAsync";
                     break;
                 default:
-                    Logger.LogInformation("{ActorId} Snoozing/ignoring alarm", Id);
+                    Logger.LogInformation("{ActorId} Snoozing alarm", Id);
                     break;
             }
 
