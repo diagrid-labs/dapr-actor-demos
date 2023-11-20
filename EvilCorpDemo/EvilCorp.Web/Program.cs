@@ -44,8 +44,8 @@ app.MapPost("/init", async () => {
     await simulationProxy.InitActorsAsync();
 });
 
-app.MapPost("/increment", async () => {
-    await simulationProxy.IncrementTimeAsync();
+app.MapPost("/start", async () => {
+    await simulationProxy.StartTimeAsync();
 });
 
 app.Run();

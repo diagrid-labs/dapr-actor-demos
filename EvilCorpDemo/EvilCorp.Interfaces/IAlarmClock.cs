@@ -17,13 +17,17 @@ namespace EvilCorp.Interfaces
         {
         }
 
-        public AlarmClockData(string regionalOfficeId, DateTime alarmTime)
+        public AlarmClockData(string regionalOfficeId, DateTime alarmTime, TimeSpan snoozeInterval, TimeSpan maxSnoozeTime)
         {
             RegionalOfficeId = regionalOfficeId;
             AlarmTime = alarmTime;
+            SnoozeInterval = snoozeInterval;
+            MaxSnoozeTime = maxSnoozeTime;
         }
 
         public string RegionalOfficeId { get; init; }
         public DateTime AlarmTime { get; init; }
+        public TimeSpan SnoozeInterval { get; init; }
+        public TimeSpan MaxSnoozeTime { get; init; }
     }
 }

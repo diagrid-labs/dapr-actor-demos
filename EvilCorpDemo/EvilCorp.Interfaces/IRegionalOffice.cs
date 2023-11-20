@@ -24,20 +24,17 @@ namespace EvilCorp.Interfaces
             string id,
             string timeZoneId,
             string headQuartersId,
-            DateTime utcSyncTime,
-            DateTime wakeUpTime)
+            DateTime utcSyncTime)
         {
             Id = id;
             TimeZoneId = timeZoneId;
             HeadQuartersId = headQuartersId;
             UtcSyncTime = utcSyncTime;
-            WakeUpTime = wakeUpTime;
         }
 
         public string Id { get; init;}
         public string TimeZoneId { get; init; }
         public string HeadQuartersId { get; init; }
         public DateTime UtcSyncTime { get; init; }
-        public DateTime WakeUpTime { get; init; }
     }
 }

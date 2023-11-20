@@ -2,9 +2,9 @@
 @appHttp=http://localhost:7100
 @simulationId=simulation1
 
-### Initialize the simulation
+### Initialize the actors
 POST {{appHttp}}/init
 
-### Increment the time
-POST {{appHttp}}/increment
+### Start the simulation
+POST {{appHttp}}/start
 

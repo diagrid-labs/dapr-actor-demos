@@ -6,7 +6,7 @@ namespace EvilCorp.Web
     public class HeadQuartersActor : Actor, IHeadQuarters
     {
         private const string EMPLOYEE_IDS_KEY = "employee-ids";
-        private const string REGIONAL_OFFICE_IDS_KEY = "local-office-ids";
+        private const string REGIONAL_OFFICE_IDS_KEY = "regional-office-ids";
 
         public HeadQuartersActor(ActorHost host) : base(host)
         {

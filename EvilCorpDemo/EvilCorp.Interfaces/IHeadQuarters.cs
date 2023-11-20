@@ -4,7 +4,7 @@ namespace EvilCorp.Interfaces
 {
     public interface IHeadQuarters : IActor
     {
-        Task SetRegionalOfficeIdsAsync(string[] localOfficeIds);
+        Task SetRegionalOfficeIdsAsync(string[] regionalOfficeIds);
         Task<string[]> GetRegionalOfficeIdsAsync();
         Task SetEmployeeIdsAsync(Dictionary<string, string[]> employeeIds);
         Task<Dictionary<string,string[]>> GetEmployeeIdsAsync();

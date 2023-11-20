@@ -75,8 +75,7 @@ namespace EvilCorp.Web
             }
             else
             {
-                var timeSpan = TimeSpan.FromMinutes(30);
-                var absoluteLimit = alarmClockData.AlarmTime.Add(timeSpan);
+                var absoluteLimit = alarmClockData.AlarmTime.Add(alarmClockData.MaxSnoozeTime);
                 if (absoluteLimit > await GetTimeAsync())
                 {
                     Logger.LogInformation("{AlarmClockId}: Time limit exceeded. Employee will be fired.", Id.GetId());
@@ -125,13 +124,14 @@ namespace EvilCorp.Web
 
         private async Task IncrementTimeHandler()
         {
+            var alarmClockData = await GetAlarmClockDataAsync();
             var time = await GetTimeAsync();
-            var incrementedTime = time.AddMinutes(5);
+            var incrementedTime = time.AddMinutes(10);
             await SetTimeAsync(incrementedTime);
 
             Logger.LogInformation("Incremented time for {AlarmClockId} to {time}", Id, incrementedTime);
 
-            var alarmClockData = await GetAlarmClockDataAsync();
+            
             var isAlarmTriggered = await GetIsAlarmTriggeredAsync();
             if (incrementedTime >= alarmClockData.AlarmTime && !isAlarmTriggered)
             {
