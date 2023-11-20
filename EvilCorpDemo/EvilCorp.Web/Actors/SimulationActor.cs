@@ -10,7 +10,7 @@ namespace EvilCorp.Web
         {
         }
 
-        public async Task InitActorsAsync()
+        public async Task InitActorsAsync(SimulationData data)
         {
             // Create the HeadQuarters actor
             Logger.LogInformation("Creating HeadQuarters actor");
@@ -22,7 +22,7 @@ namespace EvilCorp.Web
             var globalEmployeeIdList = new Dictionary<string, string[]>();
 
             var londonOfficeData = new RegionalOfficeData("London", "GMT Standard Time", headQuartersId.GetId(), utcSyncTime);
-            var londonOfficeProxy = await AddRegionalOffice(londonOfficeData, new Range(1, 5));
+            var londonOfficeProxy = await AddRegionalOffice(londonOfficeData, new Range(1, data.EmployeeCount + 1));
             var londonAlarmClockEmployeeMapping = await londonOfficeProxy.GetAlarmClockEmployeeMappingAsync();
             
             Logger.LogInformation("London EmployeeIds: {LondonEmployeeIds}", string.Join(", ", londonAlarmClockEmployeeMapping.Values.ToArray()));

@@ -53,8 +53,6 @@ namespace EvilCorp.Web
             }
             await SetSnoozeCountAsync(snoozeCount);
             Logger.LogInformation("{ActorId} new snoozeCount: {SnoozeCount}", Id, snoozeCount);
-
-            await Task.CompletedTask;
         }
 
         public async Task StopTimersAsync()

@@ -4,7 +4,12 @@ namespace EvilCorp.Interfaces
 {
     public interface ISimulation : IActor
     {
-        Task InitActorsAsync();
+        Task InitActorsAsync(SimulationData data);
         Task StartTimeAsync();
+    }
+
+    public class SimulationData
+    {
+        public int EmployeeCount { get; set; }
     }
 }

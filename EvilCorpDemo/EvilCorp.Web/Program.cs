@@ -1,7 +1,6 @@
 
 using Dapr.Actors;
 using Dapr.Actors.Client;
-using Dapr.Client;
 using EvilCorp.Interfaces;
 using EvilCorp.Web;
 
@@ -42,8 +41,8 @@ var simulationProxy = proxyFactory.CreateActorProxy<ISimulation>(
     simulationActorId,
     nameof(SimulationActor));
 
-app.MapPost("/init", async () => {
-    await simulationProxy.InitActorsAsync();
+app.MapPost("/init", async (SimulationData data) => {
+    await simulationProxy.InitActorsAsync(data);
 });
 
 app.MapPost("/start", async () => {
