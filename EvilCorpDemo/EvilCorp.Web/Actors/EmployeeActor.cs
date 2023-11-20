@@ -25,10 +25,10 @@ namespace EvilCorp.Web
         public async Task AcknowledgeAlarmAsync()
         {
             var employeeData = await GetEmployeeDataAsync();
-            var alarmDeviceProxy = ProxyFactory.CreateActorProxy<IAlarmDevice>(
-                new ActorId(employeeData.AlarmDeviceId),
-                nameof(AlarmDeviceActor));
-            await alarmDeviceProxy.StopAlarmAsync();
+            var alarmClockProxy = ProxyFactory.CreateActorProxy<IAlarmClock>(
+                new ActorId(employeeData.AlarmClockId),
+                nameof(AlarmClockActor));
+            await alarmClockProxy.StopAlarmAsync();
         }
 
         public Task SnoozeAlarmAsync()

@@ -19,7 +19,7 @@ namespace EvilCorp.Web
             var headQuartersId = new ActorId("headquarters");
             var hqProxy = ProxyFactory.CreateActorProxy<IHeadQuarters>(headQuartersId, nameof(HeadQuartersActor));
 
-            // At 3:00 UTC regional offices will sync the time with all the AlarmDevices
+            // At 3:00 UTC regional offices will sync the time with all the AlarmClocks
             var utcSyncTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 3, 0, 0);
             Logger.LogInformation("Setting UTC time to {UtcSyncTime}", utcSyncTime);
             await StateManager.SetStateAsync(UTC_TIME_KEY, utcSyncTime);
@@ -30,13 +30,13 @@ namespace EvilCorp.Web
 
             var londonOfficeData = new RegionalOfficeData("London", "GMT Standard Time", headQuartersId.GetId(), utcSyncTime, regionalWakeUpTime);
             var londonOfficeProxy = await AddRegionalOffice(londonOfficeData, new Range(1, 3));
-            var londonEmployeeIds = (await londonOfficeProxy.GetAlarmDeviceEmployeeMappingAsync()).Values.ToArray();
+            var londonEmployeeIds = (await londonOfficeProxy.GetAlarmClockEmployeeMappingAsync()).Values.ToArray();
             Logger.LogInformation("London employee IDs: {LondonEmployeeIds}", string.Join(", ", londonEmployeeIds));
             globalEmployeeIdList.Add(londonOfficeData.Id, londonEmployeeIds);
 
             // var newYorkOfficeData = new RegionalOfficeData("New York", "Eastern Standard Time", headQuartersId.GetId(), utcSyncTime, regionalWakeUpTime);
             // var newYorkOfficeProxy = await AddRegionalOffice(newYorkOfficeData, new Range(3, 5));
-            // var newYorkEmployeeIds = (await newYorkOfficeProxy.GetAlarmDeviceEmployeeMappingAsync()).Values.ToArray();
+            // var newYorkEmployeeIds = (await newYorkOfficeProxy.GetAlarmClockEmployeeMappingAsync()).Values.ToArray();
             // Logger.LogInformation("New York employee IDs: {NewYorkEmployeeIds}", string.Join(", ", newYorkEmployeeIds));
             // globalEmployeeIdList.Add(newYorkOfficeData.Id, newYorkEmployeeIds);
 
@@ -60,43 +60,43 @@ namespace EvilCorp.Web
 
             await regionalOfficeProxy.SetRegionalOfficeDataAsync(regionalOfficeData);
 
-            var employeeAndAlarmDeviceIds = await AddAlarmDevicesAndEmployees(employeeIds, regionalOfficeData);
-            await regionalOfficeProxy.SetAlarmDeviceEmployeeMappingAsync(employeeAndAlarmDeviceIds);
+            var employeeAndAlarmClockIds = await AddAlarmClocksAndEmployees(employeeIds, regionalOfficeData);
+            await regionalOfficeProxy.SetAlarmClockEmployeeMappingAsync(employeeAndAlarmClockIds);
 
             return regionalOfficeProxy;
         }
 
-        private async Task<Dictionary<string, string>> AddAlarmDevicesAndEmployees(
+        private async Task<Dictionary<string, string>> AddAlarmClocksAndEmployees(
             Range employeeNumbers,
             RegionalOfficeData regionalOfficeData)
         {
-            var alarmDeviceEmployeeMapping = new Dictionary<string, string>();
+            var alarmClockEmployeeMapping = new Dictionary<string, string>();
 
             for (int i = employeeNumbers.Start.Value; i < employeeNumbers.End.Value; i++)
             {
-                var employeeId = new ActorId($"Employee {i}");
+                var employeeId = new ActorId($"Employee-{i}");
                 var employeeProxy = ProxyFactory.CreateActorProxy<IEmployee>(employeeId, nameof(EmployeeActor));
                 Logger.LogInformation("Created employee {EmployeeId}", employeeId.GetId());
 
-                var alarmDeviceId = new ActorId($"AlarmDevice {i}");
-                var alarmDeviceProxy = ProxyFactory.CreateActorProxy<IAlarmDevice>(alarmDeviceId, nameof(AlarmDeviceActor));
-                Logger.LogInformation("Created alarm device {AlarmDeviceId}", alarmDeviceId.GetId());
-                alarmDeviceEmployeeMapping.Add(alarmDeviceId.GetId(), employeeId.GetId());
+                var alarmClockId = new ActorId($"AlarmClock-{i}");
+                var alarmClockProxy = ProxyFactory.CreateActorProxy<IAlarmClock>(alarmClockId, nameof(AlarmClockActor));
+                Logger.LogInformation("Created alarm clock {AlarmClockId}", alarmClockId.GetId());
+                alarmClockEmployeeMapping.Add(alarmClockId.GetId(), employeeId.GetId());
 
-                await alarmDeviceProxy.SetAlarmDeviceDataAsync(
-                    new AlarmDeviceData(
+                await alarmClockProxy.SetAlarmClockDataAsync(
+                    new AlarmClockData(
                         regionalOfficeData.Id,
                         regionalOfficeData.WakeUpTime));
 
-                // Use the utcSyncTime and the TimeZoneInfo to set the regional time on the AlarmDevice.
+                // Use the utcSyncTime and the TimeZoneInfo to set the regional time on the AlarmClock.
                 var timeZone = TimeZoneInfo.FindSystemTimeZoneById(regionalOfficeData.TimeZoneId);
                 var regionalSyncDateTime = TimeZoneInfo.ConvertTimeFromUtc(regionalOfficeData.UtcSyncTime, timeZone);
-                await alarmDeviceProxy.SetTimeAsync(regionalSyncDateTime);
-                var employeeData = new EmployeeData(alarmDeviceId.GetId());
+                await alarmClockProxy.SetTimeAsync(regionalSyncDateTime);
+                var employeeData = new EmployeeData(alarmClockId.GetId());
                 await employeeProxy.SetEmployeeDataAsync(employeeData);
             }
 
-            return alarmDeviceEmployeeMapping;
+            return alarmClockEmployeeMapping;
         }
     }
 }

@@ -6,11 +6,11 @@ namespace EvilCorp.Interfaces
     {
         Task SetRegionalOfficeDataAsync(RegionalOfficeData regionalOfficeData);
         Task<RegionalOfficeData> GetRegionalOfficeDataAsync();
-        Task SetAlarmDeviceEmployeeMappingAsync(Dictionary<string, string> employeeIds);
-        Task<Dictionary<string, string>> GetAlarmDeviceEmployeeMappingAsync();
+        Task SetAlarmClockEmployeeMappingAsync(Dictionary<string, string> employeeIds);
+        Task<Dictionary<string, string>> GetAlarmClockEmployeeMappingAsync();
         Task<string[]> GetEmployeeIdsAsync();
-        Task TriggerAlarmDevicesAsync();
-        Task FireEmployeeAsync(string alarmDeviceId);
+        Task TriggerAlarmClocksAsync();
+        Task FireEmployeeAsync(string alarmClockId);
     }
 
     public class RegionalOfficeData

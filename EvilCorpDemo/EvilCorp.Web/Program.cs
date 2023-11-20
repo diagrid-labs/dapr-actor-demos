@@ -12,7 +12,7 @@ builder.Services.AddActors(options =>
 {
     options.Actors.RegisterActor<HeadQuartersActor>();
     options.Actors.RegisterActor<RegionalOfficeActor>();
-    options.Actors.RegisterActor<AlarmDeviceActor>();
+    options.Actors.RegisterActor<AlarmClockActor>();
     options.Actors.RegisterActor<EmployeeActor>();
     options.Actors.RegisterActor<SimulationActor>();
     options.ReentrancyConfig = new Dapr.Actors.ActorReentrancyConfig()

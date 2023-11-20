@@ -4,28 +4,28 @@ using EvilCorp.Interfaces;
 
 namespace EvilCorp.Web
 {
-    public class AlarmDeviceActor : Actor, IAlarmDevice
+    public class AlarmClockActor : Actor, IAlarmClock
     {
-        private const string ALARM_DEVICE_DATA_KEY = "alarm-device-data";
+        private const string ALARM_CLOCK_DATA_KEY = "alarm-clock-data";
         private const string SNOOZE_COUNT_KEY = "snooze-count";
         private const string ALARM_TIMER_NAME = "alarm-timer";
         private const string TIME_KEY = "time";
         private const string IS_ALARM_TRIGGERED_KEY = "is-alarm-triggered";
         private const string TIME_TIMER_NAME = "time-timer";
 
-        public AlarmDeviceActor(ActorHost host) : base(host)
+        public AlarmClockActor(ActorHost host) : base(host)
         {
         }
 
-        public async Task SetAlarmDeviceDataAsync(AlarmDeviceData alarmDeviceData)
+        public async Task SetAlarmClockDataAsync(AlarmClockData alarmClockData)
         {
-            await StateManager.SetStateAsync(ALARM_DEVICE_DATA_KEY, alarmDeviceData);
+            await StateManager.SetStateAsync(ALARM_CLOCK_DATA_KEY, alarmClockData);
             await SetIsAlarmTriggeredAsync(false);
         }
 
-        public async Task<AlarmDeviceData> GetAlarmDeviceDataAsync()
+        public async Task<AlarmClockData> GetAlarmClockDataAsync()
         {
-            return await StateManager.GetStateAsync<AlarmDeviceData>(ALARM_DEVICE_DATA_KEY);
+            return await StateManager.GetStateAsync<AlarmClockData>(ALARM_CLOCK_DATA_KEY);
         }
 
         public async Task TriggerAlarmAsync()
@@ -47,8 +47,8 @@ namespace EvilCorp.Web
 
         private async Task SnoozeHandler()
         {
-            var alarmDeviceData = await GetAlarmDeviceDataAsync();
-            Logger.LogInformation("WAKE UP AND GO TO WORK {AlarmDeviceId}!", Id.GetId());
+            var alarmClockData = await GetAlarmClockDataAsync();
+            Logger.LogInformation("WAKE UP AND GO TO WORK {AlarmClockId}!", Id.GetId());
 
             int snoozeCount = 0;
             var snoozeCountResult = await StateManager.TryGetStateAsync<int>(SNOOZE_COUNT_KEY);
@@ -57,7 +57,7 @@ namespace EvilCorp.Web
                 if (snoozeCount == 3)
                 {
                     // Employee will be fired
-                    var regionalOfficeActorId = new ActorId(alarmDeviceData.RegionalOfficeId);
+                    var regionalOfficeActorId = new ActorId(alarmClockData.RegionalOfficeId);
                     var regionalOfficeActorProxy = ProxyFactory.CreateActorProxy<IRegionalOffice>(
                         regionalOfficeActorId,
                         nameof(RegionalOfficeActor));
@@ -80,7 +80,7 @@ namespace EvilCorp.Web
 
         public async Task SetTimeAsync(DateTime time)
         {
-            Logger.LogInformation("Setting time for {AlarmDeviceActorId} to {Time}", Id, time);
+            Logger.LogInformation("Setting time for {AlarmClockId} to {Time}", Id, time);
 
             await StateManager.SetStateAsync(TIME_KEY, time);
 
@@ -98,11 +98,11 @@ namespace EvilCorp.Web
             var incrementedTime = time.AddMinutes(5);
             await StateManager.SetStateAsync(TIME_KEY, incrementedTime);
 
-            Logger.LogInformation("Incremented time for {AlarmDeviceActorId} to {time}", Id, incrementedTime);
+            Logger.LogInformation("Incremented time for {AlarmClockId} to {time}", Id, incrementedTime);
 
-            var alarmDeviceData = await GetAlarmDeviceDataAsync();
+            var alarmClockData = await GetAlarmClockDataAsync();
             var isAlarmTriggered = await GetIsAlarmTriggeredAsync();
-            if (incrementedTime >= alarmDeviceData.AlarmTime && !isAlarmTriggered)
+            if (incrementedTime >= alarmClockData.AlarmTime && !isAlarmTriggered)
             {
                 await TriggerAlarmAsync();
             }

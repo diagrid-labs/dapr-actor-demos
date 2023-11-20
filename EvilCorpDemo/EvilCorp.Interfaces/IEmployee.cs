@@ -17,11 +17,11 @@ namespace EvilCorp.Interfaces
             
         }
 
-        public EmployeeData(string alarmDeviceId)
+        public EmployeeData(string alarmClockId)
         {
-            AlarmDeviceId = alarmDeviceId;
+            AlarmClockId = alarmClockId;
         }
 
-        public string AlarmDeviceId { get; init; }
+        public string AlarmClockId { get; init; }
     }
 }

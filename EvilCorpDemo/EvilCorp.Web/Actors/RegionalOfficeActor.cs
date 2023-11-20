@@ -7,7 +7,7 @@ namespace EvilCorp.Web
     public class RegionalOfficeActor : Actor, IRegionalOffice
     {
         private const string REGIONAL_OFFICE_DATA_KEY = "regional-office-data";
-        private const string ALARM_DEVICE_EMPLOYEE_KEY = "alarm-device-employee";
+        private const string ALARM_CLOCK_EMPLOYEE_KEY = "alarm-clock-employee";
 
         public RegionalOfficeActor(ActorHost host) : base(host)
         {
@@ -23,38 +23,38 @@ namespace EvilCorp.Web
             return await StateManager.GetStateAsync<RegionalOfficeData>(REGIONAL_OFFICE_DATA_KEY);
         }
 
-        public async Task SetAlarmDeviceEmployeeMappingAsync(Dictionary<string, string> alarmDeviceEmployeeMapping)
+        public async Task SetAlarmClockEmployeeMappingAsync(Dictionary<string, string> alarmClockEmployeeMapping)
         {
-            await StateManager.SetStateAsync(ALARM_DEVICE_EMPLOYEE_KEY, alarmDeviceEmployeeMapping);
+            await StateManager.SetStateAsync(ALARM_CLOCK_EMPLOYEE_KEY, alarmClockEmployeeMapping);
         }
 
-        public async Task<Dictionary<string, string>> GetAlarmDeviceEmployeeMappingAsync()
+        public async Task<Dictionary<string, string>> GetAlarmClockEmployeeMappingAsync()
         {
-            return await StateManager.GetStateAsync<Dictionary<string, string>>(ALARM_DEVICE_EMPLOYEE_KEY);
+            return await StateManager.GetStateAsync<Dictionary<string, string>>(ALARM_CLOCK_EMPLOYEE_KEY);
         }
 
-        public async Task TriggerAlarmDevicesAsync()
+        public async Task TriggerAlarmClocksAsync()
         {
-            Logger.LogInformation("Triggering alarm devices for {Region}!", Id);
+            Logger.LogInformation("Triggering alarm clocks for {Region}!", Id);
 
-            var mapping = await GetAlarmDeviceEmployeeMappingAsync();
-            foreach (var alarmDeviceId in mapping.Keys)
+            var mapping = await GetAlarmClockEmployeeMappingAsync();
+            foreach (var alarmClockId in mapping.Keys)
             {
-                var alarmDeviceProxy = ProxyFactory.CreateActorProxy<IAlarmDevice>(
-                    new ActorId(alarmDeviceId),
-                    nameof(AlarmDeviceActor));
-                await alarmDeviceProxy.TriggerAlarmAsync();
+                var alarmClockProxy = ProxyFactory.CreateActorProxy<IAlarmClock>(
+                    new ActorId(alarmClockId),
+                    nameof(AlarmClockActor));
+                await alarmClockProxy.TriggerAlarmAsync();
             }
         }
 
-        public async Task FireEmployeeAsync(string alarmDeviceId)
+        public async Task FireEmployeeAsync(string alarmClockId)
         {
             var regionalOfficeData = await GetRegionalOfficeDataAsync();
             var headQuartersProxy = ProxyFactory.CreateActorProxy<IHeadQuarters>(
                 new ActorId(regionalOfficeData.HeadQuartersId),
                 nameof(HeadQuartersActor));
-            var mapping = await GetAlarmDeviceEmployeeMappingAsync();
-            var employeeId = mapping[alarmDeviceId];
+            var mapping = await GetAlarmClockEmployeeMappingAsync();
+            var employeeId = mapping[alarmClockId];
             await headQuartersProxy.FireEmployeeAsync(Id.GetId(), employeeId);
         }
 
