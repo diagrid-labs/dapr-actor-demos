@@ -6,7 +6,8 @@ namespace EvilCorp.Interfaces
     {
         Task SetEmployeeDataAsync(EmployeeData employeeData);
         Task<EmployeeData> GetEmployeeDataAsync();
-        Task HandleAlarmAsync();
+        Task<string> GetAlarmResponseAsync();
+        Task SetIsFiredAsync();
     }
 
     public class EmployeeData

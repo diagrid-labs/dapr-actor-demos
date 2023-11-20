@@ -1,4 +1,3 @@
-using Dapr.Actors;
 using Dapr.Actors.Runtime;
 using EvilCorp.Interfaces;
 
@@ -7,6 +6,7 @@ namespace EvilCorp.Web
     public class EmployeeActor : Actor, IEmployee
     {
         private const string EMPLOYEE_DATA_KEY = "employee-data";
+        private const string IS_FIRED_KEY = "is-fired";
 
         public EmployeeActor(ActorHost host) : base(host)
         {
@@ -22,42 +22,28 @@ namespace EvilCorp.Web
             return await StateManager.GetStateAsync<EmployeeData>(EMPLOYEE_DATA_KEY);
         }
 
-        public async Task HandleAlarmAsync()
+        public Task<string> GetAlarmResponseAsync()
         {
             var random = new Random();
-            var outcome = random.Next(0, 3);
+            var outcome = random.Next(0, 2);
+            string alarmClockMethod = string.Empty;
             switch (outcome)
             {
                 case 0:
                     Logger.LogInformation("{ActorId} Acknowledging alarm", Id);
-                    await AcknowledgeAlarmAsync();
+                    alarmClockMethod = "StopTimersAsync";
                     break;
-                case 1:
-                    //Logger.LogInformation("{ActorId} Snoozing alarm", Id);
-                    //await SnoozeAlarmAsync();
-                    //break;
                 default:
-                    Logger.LogInformation("{ActorId} Ignoring alarm", Id);
+                    Logger.LogInformation("{ActorId} Snoozing/ignoring alarm", Id);
                     break;
             }
+
+            return Task.FromResult(alarmClockMethod);
         }
 
-        private async Task AcknowledgeAlarmAsync()
+        public async Task SetIsFiredAsync()
         {
-            var employeeData = await GetEmployeeDataAsync();
-            var alarmClockProxy = ProxyFactory.CreateActorProxy<IAlarmClock>(
-                new ActorId(employeeData.AlarmClockId),
-                nameof(AlarmClockActor));
-            await alarmClockProxy.StopTimersAsync();
-        }
-
-        private async Task SnoozeAlarmAsync()
-        {
-            var employeeData = await GetEmployeeDataAsync();
-            var alarmClockProxy = ProxyFactory.CreateActorProxy<IAlarmClock>(
-                new ActorId(employeeData.AlarmClockId),
-                nameof(AlarmClockActor));
-            await alarmClockProxy.SnoozeAlarmAsync();
+            await StateManager.SetStateAsync(IS_FIRED_KEY, true);
         }
     }
 }

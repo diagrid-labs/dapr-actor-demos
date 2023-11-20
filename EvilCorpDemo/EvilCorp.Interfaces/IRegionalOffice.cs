@@ -8,7 +8,6 @@ namespace EvilCorp.Interfaces
         Task<RegionalOfficeData> GetRegionalOfficeDataAsync();
         Task SetAlarmClockEmployeeMappingAsync(Dictionary<string, string> employeeIds);
         Task<Dictionary<string, string>> GetAlarmClockEmployeeMappingAsync();
-        Task RemoveEmployeeAsync(string employeeId);
         Task<string[]> GetEmployeeIdsAsync();
         Task<string> GetEmployeeIdAsync(string alarmClockId);
         Task SetAlarmClockTimeAsync(DateTime time);

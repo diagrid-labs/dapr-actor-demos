@@ -6,7 +6,7 @@ POST {{appHttp}}/init
 Content-Type: application/json
 
 {
-    "EmployeeCount": 1
+    "EmployeeCount": 3
 }
 
 ### Start the simulation
