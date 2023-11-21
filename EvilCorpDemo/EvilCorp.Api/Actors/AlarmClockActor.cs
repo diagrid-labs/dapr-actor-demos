@@ -1,9 +1,6 @@
 using Dapr.Actors;
 using Dapr.Actors.Runtime;
 using EvilCorp.Interfaces;
-using IO.Ably;
-using IO.Ably.Rest;
-using Microsoft.AspNetCore.Components.Forms;
 
 namespace EvilCorp.Web
 {
@@ -139,6 +136,7 @@ namespace EvilCorp.Web
 
             Logger.LogInformation("{AlarmClockId} Set time to {Time}", Id, time);
             await SetTimeAsync(time);
+            await SendTimeUpdate(await GetAlarmClockDataAsync(), time);
 
             await RegisterTimerAsync(
                 TIME_TIMER_NAME,
@@ -159,14 +157,7 @@ namespace EvilCorp.Web
             var time = await GetTimeAsync();
             var incrementedTime = time.AddMinutes(alarmClockData.TimeIncrementMinutes);
             await SetTimeAsync(incrementedTime);
-
-            var realtimeProxy = GetRealtimeNotificationProxy();
-            await realtimeProxy.SendUpdateTimeMessageAsync(
-                new AlarmClockMessage(
-                    Id.GetId(),
-                    alarmClockData.AlarmTime,
-                    incrementedTime
-                ));
+            await SendTimeUpdate(alarmClockData, incrementedTime);
 
             Logger.LogInformation("{AlarmClockId} Set time to {time}", Id, incrementedTime);
 
@@ -174,6 +165,17 @@ namespace EvilCorp.Web
             {
                 await AlarmHandler(alarmClockData);
             }
+        }
+
+        private async Task SendTimeUpdate(AlarmClockData alarmClockData, DateTime incrementedTime)
+        {
+            var realtimeProxy = GetRealtimeNotificationProxy();
+            await realtimeProxy.SendUpdateTimeMessageAsync(
+                new AlarmClockMessage(
+                    Id.GetId(),
+                    alarmClockData.AlarmTime,
+                    incrementedTime
+                ));
         }
 
         private async Task<bool> GetIsAlarmAcknowledgedAsync()

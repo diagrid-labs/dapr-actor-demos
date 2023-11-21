@@ -25,7 +25,7 @@ namespace EvilCorp.Web
         public Task<string> GetAlarmResponseAsync()
         {
             var random = new Random();
-            var outcome = random.Next(0, 2);
+            var outcome = random.Next(0, 4);
             string alarmClockMethod = string.Empty;
             switch (outcome)
             {
