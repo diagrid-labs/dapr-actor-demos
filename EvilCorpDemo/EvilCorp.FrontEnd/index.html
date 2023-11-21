@@ -7,11 +7,16 @@
 	<title>Sketch 1</title>
 	<style>
 		body,
-		button {
-			padding: 1 em;
+		button,
+		input {
+			padding: 0.2em;
 			margin: 0;
 			font-family: 'Courier New', Courier, monospace;
 			font-size: normal;
+		}
+
+		input {
+			width: 40px;
 		}
 	</style>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.8.0/p5.min.js" integrity="sha512-pgK6Wo8doipc/IPQ0ilH3b47ww01345nR9ud1/6Qp0n+lQlEW9zuw6JhysRcUpBY4yKuVZjn1MAkDxbnncuGsQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -24,6 +29,9 @@
 <body>
 	<main>
 		<button aria-label="Connect" id="connectButton" onclick="connectClient()">Connect</button>
+		<input aria-label="Number of employees" id="numberOfEmployeesInput" type="number" value="20" />
+		<button aria-label="Create Actors" id="createActorsButton" onclick="createActors()">Create actors</button>
+		<button aria-label="Start time" id="startTimeButton" onclick="startTime()">Start time</button>
   </main>
 </body>
 

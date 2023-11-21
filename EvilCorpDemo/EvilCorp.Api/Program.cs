@@ -1,9 +1,9 @@
-
+using Microsoft.AspNetCore.Mvc;
 using Dapr.Actors;
 using Dapr.Actors.Client;
+using IO.Ably;
 using EvilCorp.Interfaces;
 using EvilCorp.Web;
-using IO.Ably;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,8 +52,8 @@ var simulationProxy = proxyFactory.CreateActorProxy<ISimulation>(
     simulationActorId,
     nameof(SimulationActor));
 
-app.MapPost("/init", async (SimulationData data) => {
-    await simulationProxy.InitActorsAsync(data);
+app.MapPost("/init/{employeeCount}", async ([FromRoute]int employeeCount) => {
+    await simulationProxy.InitActorsAsync(employeeCount);
 });
 
 app.MapPost("/start", async () => {

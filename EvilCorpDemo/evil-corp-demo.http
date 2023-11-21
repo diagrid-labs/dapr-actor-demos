@@ -1,13 +1,8 @@
-@daprHttp=http://localhost:3500
 @appHttp=http://localhost:7100
-
+@employeeCount=20
 ### Initialize the actors
-POST {{appHttp}}/init
+POST {{appHttp}}/init/{{employeeCount}}
 Content-Type: application/json
-
-{
-    "EmployeeCount": 20
-}
 
 ### Start the simulation
 POST {{appHttp}}/start

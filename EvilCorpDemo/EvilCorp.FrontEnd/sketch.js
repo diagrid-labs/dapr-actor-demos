@@ -15,6 +15,29 @@ function connectClient() {
     connectAbly(clientId);
 }
 
+async function createActors() {
+    select("#createActorsButton").elt.disabled = true;
+    let employeeCount = select("#numberOfEmployeesInput").value();
+
+    let url = `http://localhost:7100/init/${employeeCount}`;
+    let options = {
+        method: 'POST',
+        mode: "no-cors",
+    };
+    await fetch(url, options)
+}
+
+async function startTime() {
+    select("#startTimeButton").elt.disabled = true;
+
+    let url = "http://localhost:7100/start";
+    let params = {
+        method: "POST",
+        mode: "no-cors",
+    };
+    await fetch(url, params)
+}
+
 function test() {
     handleAddAlarmClocks({
         alarmClockIds: ["AlarmClock-1", "AlarmClock-2", "AlarmClock-3", "AlarmClock-4", "AlarmClock-5", "AlarmClock-6", "AlarmClock-7", "AlarmClock-8", "AlarmClock-9", "AlarmClock-10"]
