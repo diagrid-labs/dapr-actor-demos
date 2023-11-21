@@ -7,6 +7,7 @@
   </PropertyGroup>
 
    <ItemGroup>
+    <PackageReference Include="ably.io" Version="1.2.14" />
     <PackageReference Include="Dapr.Actors" Version="1.12.*-*" />
     <PackageReference Include="Dapr.Actors.AspNetCore" Version="1.12.*-*" />
   </ItemGroup>

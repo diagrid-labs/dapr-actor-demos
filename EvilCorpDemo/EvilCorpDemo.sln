@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvilCorp.Interfaces", "EvilCorp.Interfaces\EvilCorp.Interfaces.csproj", "{F268910A-F788-4835-A5C4-DF3069D33144}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvilCorp.Web", "EvilCorp.Web\EvilCorp.Web.csproj", "{B805AE19-39D9-4C53-99A7-550887FE3473}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvilCorp.Api", "EvilCorp.Api\EvilCorp.Api.csproj", "{B805AE19-39D9-4C53-99A7-550887FE3473}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sketch 1</title>
+	<style>
+		body,
+		button {
+			padding: 1 em;
+			margin: 0;
+			font-family: 'Courier New', Courier, monospace;
+			font-size: normal;
+		}
+
+		canvas {
+			cursor: none;
+		}
+	</style>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.8.0/p5.min.js" integrity="sha512-pgK6Wo8doipc/IPQ0ilH3b47ww01345nR9ud1/6Qp0n+lQlEW9zuw6JhysRcUpBY4yKuVZjn1MAkDxbnncuGsQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ably/1.2.20/ably.min.js" integrity="sha512-rxPU7JKHvFzGTw+KUXujvhHl131fuhhrH/PJ0xNxLBmczOhyw8e8byCVM8rBXn/aWwP5Bsn7xIM4H/TahqZNzw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="realtime.js"></script>
+	<script src="sketch.js"></script>
+</head>
+
+<body>
+	<main>
+		<button aria-label="Connect" id="connectButton" onclick="connectClient()">Connect</button>
+  </main>
+</body>
+
+</html>

@@ -3,7 +3,7 @@ common:
   resourcesPath: ../resources/
 apps:
   - appID: evilcorp-demo
-    appDirPath: ./EvilCorp.Web/
+    appDirPath: ./EvilCorp.Api/
     appPort: 7100
     daprHTTPPort: 3500
     command: ["dotnet", "run"]

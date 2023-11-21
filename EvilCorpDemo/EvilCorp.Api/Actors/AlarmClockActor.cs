@@ -1,6 +1,9 @@
 using Dapr.Actors;
 using Dapr.Actors.Runtime;
 using EvilCorp.Interfaces;
+using IO.Ably;
+using IO.Ably.Rest;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace EvilCorp.Web
 {
@@ -30,14 +33,18 @@ namespace EvilCorp.Web
         public async Task SnoozeAlarmAsync()
         {
             Logger.LogInformation("{ActorId} Is snoozed", Id);
-            int snoozeCount = 1;
-            var snoozeCountResult = await TryGetSnoozeCountAsync();
-            if (snoozeCountResult.HasValue)
-            {
-                snoozeCount = snoozeCountResult.Value + 1;
-            }
+            var snoozeCount = await GetSnoozeCountAsync();
+            snoozeCount += 1;
             Logger.LogInformation("{ActorId} Snooze count = {SnoozeCount}", Id, snoozeCount);
             await SetSnoozeCountAsync(snoozeCount);
+
+            var realtimeProxy = GetRealtimeNotificationProxy();
+            await realtimeProxy.SendSnoozeAlarmMessageAsync(
+                new AlarmClockMessage(
+                    Id.GetId(),
+                    (await GetAlarmClockDataAsync()).AlarmTime,
+                    await GetTimeAsync(),
+                    snoozeCount));
         }
 
         public async Task StopTimersAsync()
@@ -45,6 +52,15 @@ namespace EvilCorp.Web
             Logger.LogInformation("{ActorId} Stopping timer", Id);
             await SetIsAlarmAcknowledgedAsync(true);
             await UnregisterTimerAsync(TIME_TIMER_NAME);
+
+            var realtimeProxy = GetRealtimeNotificationProxy();
+            await realtimeProxy.SendAlarmAcknowledgedMessageAsync(
+                new AlarmClockMessage(
+                    Id.GetId(),
+                    (await GetAlarmClockDataAsync()).AlarmTime,
+                    await GetTimeAsync(),
+                    await GetSnoozeCountAsync(),
+                    true));
         }
 
         private async Task AlarmHandler(AlarmClockData alarmClockData)
@@ -54,11 +70,19 @@ namespace EvilCorp.Web
                 Logger.LogInformation("{AlarmClockId}: WAKE UP AND GO TO WORK!", Id.GetId());
                 await GetEmployeeResponseAndExecuteAsync(alarmClockData);
 
-                var snoozeCountResult = await TryGetSnoozeCountAsync();
-                if (snoozeCountResult.HasValue && snoozeCountResult.Value > alarmClockData.MaxAllowedSnoozeCount)
+                var snoozeCount = await GetSnoozeCountAsync();
+                if (snoozeCount > alarmClockData.MaxAllowedSnoozeCount)
                 {
                     Logger.LogInformation("{AlarmClockId}: Snooze limit exceeded. Employee will be fired!", Id.GetId());
                     await FireEmployee(alarmClockData);
+                    
+                    var realtimeProxy = GetRealtimeNotificationProxy();
+                    await realtimeProxy.SendSnoozeLimitMessageAsync(
+                        new AlarmClockMessage(
+                            Id.GetId(),
+                            alarmClockData.AlarmTime,
+                            await GetTimeAsync(),
+                            snoozeCount));
                 }
             }
         }
@@ -101,6 +125,7 @@ namespace EvilCorp.Web
         private async Task FireEmployee(AlarmClockData alarmClockData)
         {
             await StopTimersAsync();
+
             var regionalOfficeActorId = new ActorId(alarmClockData.RegionalOfficeId);
             var regionalOfficeActorProxy = ProxyFactory.CreateActorProxy<IRegionalOffice>(
                 regionalOfficeActorId,
@@ -135,6 +160,14 @@ namespace EvilCorp.Web
             var incrementedTime = time.AddMinutes(alarmClockData.TimeIncrementMinutes);
             await SetTimeAsync(incrementedTime);
 
+            var realtimeProxy = GetRealtimeNotificationProxy();
+            await realtimeProxy.SendUpdateTimeMessageAsync(
+                new AlarmClockMessage(
+                    Id.GetId(),
+                    alarmClockData.AlarmTime,
+                    incrementedTime
+                ));
+
             Logger.LogInformation("{AlarmClockId} Set time to {time}", Id, incrementedTime);
 
             if (incrementedTime >= alarmClockData.AlarmTime)
@@ -168,9 +201,18 @@ namespace EvilCorp.Web
             await StateManager.SetStateAsync(SNOOZE_COUNT_KEY, snoozeCount);
         }
 
-        private async Task<ConditionalValue<int>> TryGetSnoozeCountAsync()
+        private async Task<int> GetSnoozeCountAsync()
         {
-            return await StateManager.TryGetStateAsync<int>(SNOOZE_COUNT_KEY);
+            var result = await StateManager.TryGetStateAsync<int>(SNOOZE_COUNT_KEY);
+
+            return result.HasValue ? result.Value : 0;
+        }
+
+        private IRealtimeNotification GetRealtimeNotificationProxy()
+        {
+            return ProxyFactory.CreateActorProxy<IRealtimeNotification>(
+                new ActorId("realtime-notification"),
+                nameof(RealtimeNotificationActor));
         }
     }
 }

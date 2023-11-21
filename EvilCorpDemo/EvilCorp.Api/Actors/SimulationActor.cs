@@ -30,11 +30,11 @@ namespace EvilCorp.Web
 
             globalEmployeeIdList.Add(londonOfficeData.Id, londonAlarmClockEmployeeMapping.Values.ToArray());
 
-            // var newYorkOfficeData = new RegionalOfficeData("New York", "Eastern Standard Time", headQuartersId.GetId(), utcSyncTime);
-            // var newYorkOfficeProxy = await AddRegionalOffice(newYorkOfficeData, new Range(3, 5));
-            // var newYorkEmployeeIds = (await newYorkOfficeProxy.GetAlarmClockEmployeeMappingAsync()).Values.ToArray();
-            // Logger.LogInformation("New York employee IDs: {NewYorkEmployeeIds}", string.Join(", ", newYorkEmployeeIds));
-            // globalEmployeeIdList.Add(newYorkOfficeData.Id, newYorkEmployeeIds);
+            var realtimeNotificationProxy = ProxyFactory.CreateActorProxy<IRealtimeNotification>(
+                new ActorId("realtime-notification"),
+                nameof(RealtimeNotificationActor));
+
+            await realtimeNotificationProxy.SendAlarmClockIdsMessageAsync(londonAlarmClockEmployeeMapping.Keys.ToArray());
 
             await headQuartersProxy.SetRegionalOfficeIdsAsync(new string[] { londonOfficeData.Id } );
             await headQuartersProxy.SetEmployeeIdsAsync(globalEmployeeIdList);
