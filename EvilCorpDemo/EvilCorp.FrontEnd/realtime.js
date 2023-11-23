@@ -1,7 +1,7 @@
 // Using a hardcoded API key is unsafe!
 // Only use this on your local machine.
 // Don't push to a public git repo or to a public facing server.
-const ABLY_API_KEY = "";
+const ABLY_API_KEY = "INSERT_ABLY_API_KEY_HERE";
 
 let ably;
 let channel;
