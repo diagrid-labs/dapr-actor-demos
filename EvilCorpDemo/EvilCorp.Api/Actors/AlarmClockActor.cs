@@ -142,8 +142,8 @@ namespace EvilCorp.Web
                 TIME_TIMER_NAME,
                 nameof(IncrementTimeHandler),
                 null,
-                TimeSpan.FromSeconds(1),
-                TimeSpan.FromSeconds(1));
+                TimeSpan.FromSeconds(2),
+                TimeSpan.FromSeconds(2));
         }
 
         private async Task IncrementTimeHandler()
