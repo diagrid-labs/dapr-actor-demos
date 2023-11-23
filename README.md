@@ -6,7 +6,7 @@ A fictional company called EvilCorp 😈 wants their employees to be more produc
 
 The front-end of the demo is a basic HTML page that uses [p5js](https://p5js.org/) to draw the information on the page. The back-end is a [Dapr](https://dapr.io/) application written in ASP.NET that uses actors for the headquarters, the regional office, the employees, and the alarm clocks. Communication between the back-end and the front-end is realized with [Ably](https://ably.com/).
 
-![EvilCorp Demo](./media/evilcorp-demo.png)
+![EvilCorp Demo](./media/evilcorp-demo.gif)
 
 When the demo is run you'll see a realtime display of the alarm clocks in the EvilCorp Dashboard. Alarm clocks are represented by a square. The color of the square indicates the state of the alarm clock:
 
