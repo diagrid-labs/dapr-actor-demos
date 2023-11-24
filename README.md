@@ -74,3 +74,13 @@ The back-end is now running and you can continue with the front-end.
 ### ActorToActor
 
 ### HttpCallActor
+
+## Resources
+
+1. [Dapr Actors overview](https://docs.dapr.io/developing-applications/building-blocks/actors/actors-overview/).
+2. [Dapr Actors API reference](https://docs.dapr.io/reference/api/actors_api/)
+
+## More information
+
+Any questions or comments about this sample? Join the [Dapr discord](https://bit.ly/dapr-discord) and post a message the `APIS > #actors` channel.
+Have you made something with Dapr? Post a message in the `#show-and-tell` channel, we love to see your creations!
