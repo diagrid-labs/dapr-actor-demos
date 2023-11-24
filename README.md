@@ -59,7 +59,7 @@ The back-end is now running and you can continue with the front-end.
 3. Open the front-end in a browser and click the `Connect` button. This establishes a connection with Ably Realtime.
 4. Enter the number of employees you want to simulate and click the `Create actors` button. This will create actors for the EvilCorp Head Quarters, the regional office, the employees and the alarm clocks.
    > Be careful not to create too many employees. The free tier of ably can only handle 70 messages per second. More info in the [Ably limits docs](https://ably.com/docs/general/limits).
-5. Click the `Start time` button to start the simulation. This will set the time of all the alarm clocks and after each two seconds 10 minutes will pass in the simulation.
+5. Click the `Start time` button to start the simulation. This will set the time of all the alarm clocks and after each two seconds 10 minutes will pass in the simulation. Once the alarm clocks reach 7:00, the employee actors will randomly acknowledge or snooze the alarm.
 
 ## Basic Actor Samples
 
