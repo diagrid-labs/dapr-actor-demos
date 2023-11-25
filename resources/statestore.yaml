@@ -12,3 +12,6 @@ spec:
     value: ""
   - name: actorStateStore
     value: "true"
+  - name: ttlInSeconds
+    value: "600"
+  
