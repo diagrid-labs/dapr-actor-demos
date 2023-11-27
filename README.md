@@ -75,17 +75,122 @@ When the demo is run you'll see a realtime display of the alarm clocks in the Ev
 
 ## Basic Actor Samples
 
+The `BasicActorSamples` folder in this repo contains a number of samples that demonstrate the basic functionality of Dapr Actors. The samples are written in C# and use the Dapr Actors .NET SDK.
+
+The Actor interactions are performed via the Dapr HTTP API and are listed in the [basic-actor-samples.http](./BasicActorSamples/basic-actor-samples.http) file.
+
 ### HelloWorldActor
+
+The `HelloWorldActor` is a stateless actor and contains two methods that can be invoked.
+
+The `SayHelloWorld` method without parameters:
+
+```bash
+GET {{ daprHttp }}/v1.0/actors/HelloWorldActor/user1/method/SayHelloWorld
+dapr-app-id: basic-actor-demos
+```
+
+The `SayHello` method with a parameter:
+
+```bash
+POST {{ daprHttp }}/v1.0/actors/HelloWorldActor/user2/method/SayHello
+dapr-app-id: basic-actor-demos
+Content-Type: application/json
+
+"Rene"
+```
 
 ### StatefulActor
 
+The `StatefulActor` is a stateful actor and contains two methods, one to set the state and one to get the state.
+
+```bash
+POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/method/SetGreeting
+dapr-app-id: basic-actor-demos
+Content-Type: application/json
+
+"Hello from StatefulActor!"
+```
+
+```bash
+GET {{ daprHttp }}/v1.0/actors/StatefulActor/user2/method/GetGreeting
+dapr-app-id: basic-actor-demos
+```
+
+The state can also be set via the Dapr Actor state endpoint:
+
+```bash
+POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state
+dapr-app-id: basic-actor-demos
+Content-Type: application/json
+
+[
+    {
+        "operation": "upsert",
+        "request": {
+            "key": "greeting",
+            "value": "Hello from StatefulActor (state endpoint)!"
+        }
+    }
+]
+```
+
+And retrieved via the Dapr Actor state endpoint:
+
+```bash
+GET {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state/greeting
+dapr-app-id: basic-actor-demos
+```
+
 ### TimerActor
+
+The `TimerActor` is an actor that contains a timer. The timer is started when the `CreateTimer` method is called and will trigger the execution of the `SnoozeHandler` method every 5 seconds.
+
+```bash
+POST {{ daprHttp }}/v1.0/actors/TimerActor/alarmclock1/method/CreateTimer
+dapr-app-id: basic-actor-demos
+```
+
+The timer can be deleted via the Dapr Actor timers endpoint:
+
+```bash
+DELETE {{ daprHttp }}/v1.0/actors/TimerActor/alarmclock1/timers/snooze
+dapr-app-id: basic-actor-demos
+```
 
 ### ReminderActor
 
+The `ReminderActor` is an actor that contains a reminder, a stateful version of a timer.
+
+```bash
+POST {{ daprHttp }}/v1.0/actors/ReminderActor/alarmclock2/reminders/snooze
+dapr-app-id: basic-actor-demos
+Content-Type: application/json
+
+{
+    "dueTime" : "0h0m3s0ms",
+    "period" : "R3/P0Y0M0W0DT0H0M10S"
+}
+```
+
+The reminder can be deleted via the Dapr Actor reminders endpoint:
+
+```bash
+DELETE {{ daprHttp }}/v1.0/actors/ReminderActor/alarmclock2/reminders/snooze
+dapr-app-id: basic-actor-demos
+```
+
 ### ActorToActor
 
-### HttpCallActor
+The `ActorToActor` sample demonstrates how to call an actor from another actor. The `CallHelloWorld` method creates a proxy of the `HelloWorldActor` and invokes the `SayHelloWorld` method on it. This requires the Actor ID of the `HelloWorldActor` to be passed as a parameter.
+
+```bash
+POST {{ daprHttp }}/v1.0/actors/ActorToActor/id1/method/CallHelloWorld
+dapr-app-id: basic-actor-demos
+Content-Type: application/json
+
+"helloWorldId1"
+```
 
 ## Resources
 

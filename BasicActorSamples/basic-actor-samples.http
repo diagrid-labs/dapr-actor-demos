@@ -8,7 +8,7 @@ dapr-app-id: basic-actor-demos
 
 ### Say Hello World
 
-POST {{ daprHttp }}/v1.0/actors/HelloWorldActor/user1/method/SayHelloWorld
+GET {{ daprHttp }}/v1.0/actors/HelloWorldActor/user1/method/SayHelloWorld
 dapr-app-id: basic-actor-demos
 
 
@@ -21,18 +21,16 @@ Content-Type: application/json
 
 ### --- State ---
 
-### Get the saved greeting for the actor with ID user2
-### Fails when key is not found
-
-GET {{ daprHttp }}/v1.0/actors/StatefulActor/user2/method/GetGreeting
-dapr-app-id: basic-actor-demos
-
 ### Set the greeting for the actor with ID user2
 POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/method/SetGreeting
 dapr-app-id: basic-actor-demos
 Content-Type: application/json
 
 "Hello from StatefulActor!"
+
+### Get the saved greeting for the actor with ID user2
+GET {{ daprHttp }}/v1.0/actors/StatefulActor/user2/method/GetGreeting
+dapr-app-id: basic-actor-demos
 
 ### Set the greeting using state endpoint for the actor with ID user2
 POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state
@@ -76,7 +74,7 @@ Content-Type: application/json
     }
 ]
 
-### Set one key, delete anotther using state endpoint for the actor with ID Alex
+### Set one key, delete another using state endpoint for the actor with ID Alex
 POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state
 dapr-app-id: basic-actor-demos
 Content-Type: application/json
@@ -99,7 +97,7 @@ Content-Type: application/json
 
 ### --- Timers ---
 
-### Reset snooze for TimerActor
+### Reset snooze count for TimerActor
 POST {{ daprHttp }}/v1.0/actors/TimerActor/alarmclock1/method/ResetSnoozeCount
 dapr-app-id: basic-actor-demos
 

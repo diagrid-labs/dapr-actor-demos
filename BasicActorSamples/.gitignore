@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+## This is an empty secrets file so the secrets.yml Dapr component will not cause errors.
+!secrets.json
+
 # User-specific files
 *.rsuser
 *.suo
