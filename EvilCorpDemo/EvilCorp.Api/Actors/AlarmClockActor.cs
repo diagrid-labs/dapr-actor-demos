@@ -11,9 +11,11 @@ namespace EvilCorp.Web
         private const string TIME_KEY = "time";
         private const string IS_ACKNOWLEDGED_KEY = "is-acknowledged";
         private const string TIME_TIMER_NAME = "time-timer";
+        private readonly IRealtimeNotification _realtimeNotification;
 
-        public AlarmClockActor(ActorHost host) : base(host)
+        public AlarmClockActor(ActorHost host, IRealtimeNotification realtimeNotification) : base(host)
         {
+            _realtimeNotification = realtimeNotification;
         }
 
         public async Task SetAlarmClockDataAsync(AlarmClockData alarmClockData)
@@ -35,8 +37,7 @@ namespace EvilCorp.Web
             Logger.LogInformation("{ActorId} Snooze count = {SnoozeCount}", Id, snoozeCount);
             await SetSnoozeCountAsync(snoozeCount);
 
-            var realtimeProxy = GetRealtimeNotificationProxy();
-            await realtimeProxy.SendSnoozeAlarmMessageAsync(
+            await _realtimeNotification.SendSnoozeAlarmMessageAsync(
                 new AlarmClockMessage(
                     Id.GetId(),
                     (await GetAlarmClockDataAsync()).AlarmTime,
@@ -50,8 +51,7 @@ namespace EvilCorp.Web
             await SetIsAlarmAcknowledgedAsync(true);
             await UnregisterTimerAsync(TIME_TIMER_NAME);
 
-            var realtimeProxy = GetRealtimeNotificationProxy();
-            await realtimeProxy.SendAlarmAcknowledgedMessageAsync(
+            await _realtimeNotification.SendAlarmAcknowledgedMessageAsync(
                 new AlarmClockMessage(
                     Id.GetId(),
                     (await GetAlarmClockDataAsync()).AlarmTime,
@@ -73,8 +73,7 @@ namespace EvilCorp.Web
                     Logger.LogInformation("{AlarmClockId}: Snooze limit exceeded. Employee will be fired!", Id.GetId());
                     await FireEmployee(alarmClockData);
                     
-                    var realtimeProxy = GetRealtimeNotificationProxy();
-                    await realtimeProxy.SendSnoozeLimitMessageAsync(
+                    await _realtimeNotification.SendSnoozeLimitMessageAsync(
                         new AlarmClockMessage(
                             Id.GetId(),
                             alarmClockData.AlarmTime,
@@ -142,8 +141,8 @@ namespace EvilCorp.Web
                 TIME_TIMER_NAME,
                 nameof(IncrementTimeHandler),
                 null,
-                TimeSpan.FromSeconds(2),
-                TimeSpan.FromSeconds(2));
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(1));
         }
 
         private async Task IncrementTimeHandler()
@@ -169,8 +168,7 @@ namespace EvilCorp.Web
 
         private async Task SendTimeUpdate(AlarmClockData alarmClockData, DateTime incrementedTime)
         {
-            var realtimeProxy = GetRealtimeNotificationProxy();
-            await realtimeProxy.SendUpdateTimeMessageAsync(
+            await _realtimeNotification.SendUpdateTimeMessageAsync(
                 new AlarmClockMessage(
                     Id.GetId(),
                     alarmClockData.AlarmTime,
@@ -208,13 +206,6 @@ namespace EvilCorp.Web
             var result = await StateManager.TryGetStateAsync<int>(SNOOZE_COUNT_KEY);
 
             return result.HasValue ? result.Value : 0;
-        }
-
-        private IRealtimeNotification GetRealtimeNotificationProxy()
-        {
-            return ProxyFactory.CreateActorProxy<IRealtimeNotification>(
-                new ActorId("realtime-notification"),
-                nameof(RealtimeNotificationActor));
         }
     }
 }

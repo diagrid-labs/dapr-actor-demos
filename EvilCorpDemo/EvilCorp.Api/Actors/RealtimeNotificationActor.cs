@@ -1,15 +1,14 @@
-using Dapr.Actors.Runtime;
-using EvilCorp.Interfaces;
 using IO.Ably;
 using IO.Ably.Rest;
+using EvilCorp.Interfaces;
 
 namespace EvilCorp.Web
 {
-    public class RealtimeNotificationActor : Actor, IRealtimeNotification
+    public class RealtimeNotification : IRealtimeNotification
     {
         private readonly IRestChannel _channel;
 
-        public RealtimeNotificationActor(ActorHost host, IRestClient realtimeClient) : base(host)
+        public RealtimeNotification(IRestClient realtimeClient)
         {
             _channel = realtimeClient.Channels.Get("evil-corp");
         }

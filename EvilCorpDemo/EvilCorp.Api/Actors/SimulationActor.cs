@@ -6,8 +6,11 @@ namespace EvilCorp.Web
 {
     public class SimulationActor : Actor, ISimulation
     {
-        public SimulationActor(ActorHost host) : base(host)
+        private readonly IRealtimeNotification _realtimeNotification;
+
+        public SimulationActor(ActorHost host, IRealtimeNotification realtimeNotification) : base(host)
         {
+            _realtimeNotification = realtimeNotification;
         }
 
         public async Task InitActorsAsync(int employeeCount)
@@ -30,11 +33,7 @@ namespace EvilCorp.Web
 
             globalEmployeeIdList.Add(londonOfficeData.Id, londonAlarmClockEmployeeMapping.Values.ToArray());
 
-            var realtimeNotificationProxy = ProxyFactory.CreateActorProxy<IRealtimeNotification>(
-                new ActorId("realtime-notification"),
-                nameof(RealtimeNotificationActor));
-
-            await realtimeNotificationProxy.SendAlarmClockIdsMessageAsync(londonAlarmClockEmployeeMapping.Keys.ToArray());
+            await _realtimeNotification.SendAlarmClockIdsMessageAsync(londonAlarmClockEmployeeMapping.Keys.ToArray());
 
             await headQuartersProxy.SetRegionalOfficeIdsAsync(new string[] { londonOfficeData.Id } );
             await headQuartersProxy.SetEmployeeIdsAsync(globalEmployeeIdList);

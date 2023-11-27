@@ -12,9 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Don't push to a public git repo or to a public facing server.
 const string ABLY_API_KEY = "INSERT_ABLY_API_KEY_HERE";
 
-builder.Services.AddSingleton<IRestClient>(
-    new AblyRest(ABLY_API_KEY)
-);
+builder.Services.AddSingleton<IRestClient>(new AblyRest(ABLY_API_KEY));
+builder.Services.AddSingleton<IRealtimeNotification, RealtimeNotification>();
 
 // Add services to the container.
 builder.Services.AddActors(options =>
@@ -24,7 +23,6 @@ builder.Services.AddActors(options =>
     options.Actors.RegisterActor<AlarmClockActor>();
     options.Actors.RegisterActor<EmployeeActor>();
     options.Actors.RegisterActor<SimulationActor>();
-    options.Actors.RegisterActor<RealtimeNotificationActor>();
     options.ActorScanInterval = TimeSpan.FromSeconds(10);
     options.ActorIdleTimeout = TimeSpan.FromMinutes(10);
     options.ReentrancyConfig = new ActorReentrancyConfig()
