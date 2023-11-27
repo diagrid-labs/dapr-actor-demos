@@ -1,8 +1,3 @@
-// Using a hardcoded API key is unsafe!
-// Only use this on your local machine.
-// Don't push to a public git repo or to a public facing server.
-const ABLY_API_KEY = "INSERT_ABLY_API_KEY_HERE";
-
 let ably;
 let channel;
 const channelName = "evil-corp";
@@ -14,10 +9,12 @@ const snoozeIncrementMessage = "snoozeIncrement";
 const snoozeLimitMessage = "snoozeLimit";
 
 async function connectAbly(clientId) {
+  let apiKeyResponse = await fetch("/get-ably-api-key");
+  let apiKey = await apiKeyResponse.text();
   const isConnected = ably?.connection.state === "connected";
   if (!isConnected) {
     const clientOptions = {
-      key: ABLY_API_KEY,
+      key: apiKey,
       clientId: clientId,
       echoMessages: false,
     };

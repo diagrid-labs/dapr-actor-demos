@@ -7,12 +7,9 @@ using EvilCorp.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Using a hardcoded API key is unsafe!
-// Only use this on your local machine.
-// Don't push to a public git repo or to a public facing server.
-const string ABLY_API_KEY = "INSERT_ABLY_API_KEY_HERE";
+var ablyApiKey = Environment.GetEnvironmentVariable("ABLY_API_KEY", EnvironmentVariableTarget.Process);
 
-builder.Services.AddSingleton<IRestClient>(new AblyRest(ABLY_API_KEY));
+builder.Services.AddSingleton<IRestClient>(new AblyRest(ablyApiKey));
 builder.Services.AddSingleton<IRealtimeNotification, RealtimeNotification>();
 
 // Add services to the container.
@@ -59,3 +56,8 @@ app.MapPost("/start", async () => {
 });
 
 app.Run();
+
+class Secrets
+{
+    public string? AblyApiKey { get; set; }
+}

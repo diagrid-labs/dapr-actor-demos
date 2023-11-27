@@ -1,8 +1,10 @@
 version: 1
 common:
   resourcesPath: ../resources/
+  env:
+    ABLY_API_KEY: "ABLY_API_KEY_HERE"
 apps:
-  - appID: evilcorp-demo
+  - appID: evilcorp-api
     appDirPath: ./EvilCorp.Api/
     appPort: 7100
     daprHTTPPort: 3500
@@ -11,3 +13,8 @@ apps:
     daprdLogDestination: console
     logLevel: info
     enableApiLogging: false
+  - appID: evilcorp-frontend
+    appDirPath: ./EvilCorp.FrontEnd/
+    appPort: 5500
+    daprHTTPPort: 3501
+    command: ["npm", "start"]
