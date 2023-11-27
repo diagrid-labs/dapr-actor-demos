@@ -1,5 +1,7 @@
 @appHttp=http://localhost:7100
+@daprHttp=http://localhost:3500
 @employeeCount=20
+
 ### Initialize the actors
 POST {{appHttp}}/init/{{employeeCount}}
 Content-Type: application/json
@@ -7,3 +9,6 @@ Content-Type: application/json
 ### Start the simulation
 POST {{appHttp}}/start
 
+### Get fired employees
+GET {{ daprHttp }}/v1.0/actors/HeadQuartersActor/headquarters/method/GetFiredEmployeeIdsAsync
+dapr-app-id: evilcorp-demo
