@@ -20,16 +20,20 @@ When the demo is run you'll see a realtime display of the alarm clocks in the Ev
 - [Dapr CLI](https://docs.dapr.io/getting-started/install-dapr-cli/)
 - [Ably account](https://ably.com/signup) (free tier is sufficient)
 
-### Running the demo
+### Configuring the demo
 
 #### Back-end
 
 1. Copy the [Ably API Root key](https://ably.com/docs/ids-and-keys#api-key) from the Ably portal.
-2. Open the `EvilCorpDemo\EvilCorp.Api\Program.cs` file and insert the Ably API key in the `ABLY_API_KEY` constant:
+2. Rename the `EvilCorpDemo/EvilCorp.Api/secrets.json.example` file to `EvilCorpDemo/EvilCorp.Api/secrets.json` and paste Ably API key in the `AblyApiKey` field:
 
-    ```csharp
-    const string ABLY_API_KEY = "INSERT_ABLY_API_KEY_HERE";
+    ```json
+    {
+        "AblyApiKey": "YOUR_ABLY_API_KEY_HERE"
+    }
     ```
+
+    > The `secrets.json` file is excluded from source control by the `.gitignore` file, so you don't have to worry the API key will be exposed to the public.
 
 3. Use the terminal to navigate to the `EvilCorpDemo` folder and build the solution:
 
@@ -37,7 +41,26 @@ When the demo is run you'll see a realtime display of the alarm clocks in the Ev
     dotnet build
     ```
 
-4. Use Dapr multi-app run to start the back-end:
+#### Front-end
+
+1. Rename the `EvilCorpDemo/EvilCorp.FrontEnd/secrets.json.example` file to `EvilCorpDemo/EvilCorp.FrontEnd/secrets.json` and paste Ably API key in the `AblyApiKey` field:
+
+    ```json
+    {
+        "AblyApiKey": "YOUR_ABLY_API_KEY_HERE"
+    }
+    ```
+
+2. Use the terminal to navigate to the `EvilCorpDemo/EvilCorp.FrontEnd` folder and install the dependencies for the front-end:
+
+    ```bash
+    npm install
+    ```
+
+### Running the demo
+
+1. Use the terminal to navigate to the `EvilCorpDemo` folder.
+2. Use Dapr multi-app run to start both the back-end and front-end with a single command:
 
     ```bash
     dapr run -f .
@@ -45,20 +68,9 @@ When the demo is run you'll see a realtime display of the alarm clocks in the Ev
 
     The `EvilCorpDemo/dapr.yaml` file contains the configuration of the apps that will be started.
 
-The back-end is now running and you can continue with the front-end.
-
-#### Front-end
-
-1. Open the `EvilCorpDemo/EvilCorp.FrontEnd/realtime.js` file and update the `ABLY_API_KEY` constant with the Ably API key:
-
-    ```javascript
-    const ABLY_API_KEY = "INSERT_ABLY_API_KEY_HERE";
-    ```
-
-2. Run the `EvilCorpDemo/EvilCorp.FrontEnd/index.html` file using a local web server. For example, using the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension in VS Code.
-3. Open the front-end in a browser and click the `Connect` button. This establishes a connection with Ably Realtime.
-4. Enter the number of employees you want to simulate and click the `Create actors` button. This will create actors for the EvilCorp Head Quarters, the regional office, the employees and the alarm clocks.
-   > Be careful not to create too many employees. The free tier of ably can only handle 70 messages per second. More info in the [Ably limits docs](https://ably.com/docs/general/limits).
+3. Open the [front-end](http://localhost:5500) in a browser and click the `Connect` button. This establishes a connection with Ably Realtime.
+4. Enter the number of employees you want to simulate and click the `Create actors` button. This will create actors for the EvilCorp head quarters, the regional office, the employees and the alarm clocks.
+   > Be careful not to create too many employees. The free tier of Ably is rate-limited to handle 70 messages per second. More info in the [Ably limits docs](https://ably.com/docs/general/limits).
 5. Click the `Start time` button to start the simulation. This will set the time of all the alarm clocks and after each two seconds 10 minutes will pass in the simulation. Once the alarm clocks reach 7:00, the employee actors will randomly acknowledge or snooze the alarm.
 
 ## Basic Actor Samples
