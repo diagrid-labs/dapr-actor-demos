@@ -1,8 +1,6 @@
 version: 1
 common:
   resourcesPath: ../resources/
-  env:
-    ABLY_API_KEY: "ABLY_API_KEY_HERE"
 apps:
   - appID: evilcorp-api
     appDirPath: ./EvilCorp.Api/

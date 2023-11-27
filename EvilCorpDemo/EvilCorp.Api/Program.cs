@@ -7,9 +7,12 @@ using EvilCorp.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var ablyApiKey = Environment.GetEnvironmentVariable("ABLY_API_KEY", EnvironmentVariableTarget.Process);
-
-builder.Services.AddSingleton<IRestClient>(new AblyRest(ablyApiKey));
+var httpClient = new HttpClient {
+    BaseAddress = new Uri("http://localhost:3500/v1.0/")
+};
+var response = await httpClient.GetAsync("secrets/localsecretstore/AblyApiKey");
+var secrets = await response.Content.ReadFromJsonAsync<Secrets>();
+builder.Services.AddSingleton<IRestClient>(new AblyRest(secrets?.AblyApiKey));
 builder.Services.AddSingleton<IRealtimeNotification, RealtimeNotification>();
 
 // Add services to the container.
