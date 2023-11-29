@@ -61,7 +61,7 @@ function draw() {
 }
 
 function handleAddAlarmClocks(data) {
-    const itemSize = 150;
+    const itemSize = 120;
     const maxItemsPerRow = Math.floor(windowWidth / (itemSize + 15));
     let itemCount = 0;
     data.alarmClockIds.forEach(alarmClockId => {
