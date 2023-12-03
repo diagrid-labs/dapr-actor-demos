@@ -3,6 +3,31 @@
   "title": "EvilCorpDemo",
   "steps": [
     {
+      "file": "EvilCorpDemo/EvilCorp.Interfaces/ISimulation.cs",
+      "description": "## ISimulation",
+      "line": 5
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Interfaces/IHeadQuarters.cs",
+      "description": "## IHeadQuarters",
+      "line": 5
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Interfaces/IRegionalOffice.cs",
+      "description": "## IRegionalOffice",
+      "line": 5
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Interfaces/IAlarmClock.cs",
+      "description": "## IAlarmClock",
+      "line": 5
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Interfaces/IEmployee.cs",
+      "description": "## IEmployee",
+      "line": 5
+    },
+    {
       "file": "EvilCorpDemo/EvilCorp.Api/Program.cs",
       "description": "## Program.cs - AddActors\n\nAdd Actor definitions to the services collection.",
       "line": 19
