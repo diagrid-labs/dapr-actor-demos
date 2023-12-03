@@ -3,6 +3,23 @@
   "title": "EvilCorpDemo",
   "steps": [
     {
+      "directory": "EvilCorpDemo/EvilCorp.Api",
+      "description": "## EvilCorp.Api project"
+    },
+    {
+      "directory": "EvilCorpDemo/EvilCorp.FrontEnd",
+      "description": "## EvilCorp.FrontEnd project"
+    },
+    {
+      "directory": "EvilCorpDemo/EvilCorp.Interfaces",
+      "description": "## EvilCorp.Interfaces project"
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Interfaces/EvilCorp.Interfaces.csproj",
+      "description": "## Dapr.Actors package reference",
+      "line": 10
+    },
+    {
       "file": "EvilCorpDemo/EvilCorp.Interfaces/ISimulation.cs",
       "description": "## ISimulation",
       "line": 5
@@ -26,6 +43,11 @@
       "file": "EvilCorpDemo/EvilCorp.Interfaces/IEmployee.cs",
       "description": "## IEmployee",
       "line": 5
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/EvilCorp.Api.csproj",
+      "description": "## Dapr.Actors.AspNetCore package reference",
+      "line": 12
     },
     {
       "file": "EvilCorpDemo/EvilCorp.Api/Program.cs",
@@ -70,17 +92,27 @@
     {
       "file": "EvilCorpDemo/EvilCorp.Api/Actors/AlarmClockActor.cs",
       "description": "## AlarmClockActor - SetSyncTimeAsync\n\nSets the alarm clock time, and registers the timer that increments the time.",
-      "line": 132
+      "line": 133
     },
     {
       "file": "EvilCorpDemo/EvilCorp.Api/Actors/AlarmClockActor.cs",
       "description": "## AlarmClockActor - IncrementTimeHandler\n\nThis method is responsible for incrementing the alarm clock time, and handling the alarm in case the alarm clock time is equal to or later than the alarm time. ",
-      "line": 148
+      "line": 149
     },
     {
       "file": "EvilCorpDemo/EvilCorp.Api/Actors/AlarmClockActor.cs",
       "description": "## AlarmClockActor - AlarmHandler\n\nThis method is responsible for getting the employee response, updating the snooze count and informing the regional office in case the employee did not respond on time.",
       "line": 63
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Actors/AlarmClockActor.cs",
+      "description": "## AlarmClockActor - GetEmployeeResponseAndExecute",
+      "line": 86
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Actors/EmployeeActor.cs",
+      "description": "## EmployeeActor - GetAlarmResponse\n\nThis method randomly selects an alarm acknowledge or alarm snoose response and returns that to the caller.",
+      "line": 25
     }
   ]
 }
