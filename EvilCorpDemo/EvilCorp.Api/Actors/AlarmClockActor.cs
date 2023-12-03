@@ -120,7 +120,8 @@ namespace EvilCorp.Web
 
         private async Task FireEmployee(AlarmClockData alarmClockData)
         {
-            await StopTimersAsync();
+            await UnregisterReminderAsync(TIME_TIMER_NAME);
+            await SetIsAlarmAcknowledgedAsync(true);
 
             var regionalOfficeActorId = new ActorId(alarmClockData.RegionalOfficeId);
             var regionalOfficeActorProxy = ProxyFactory.CreateActorProxy<IRegionalOffice>(
@@ -141,8 +142,8 @@ namespace EvilCorp.Web
                 TIME_TIMER_NAME,
                 nameof(IncrementTimeHandler),
                 null,
-                TimeSpan.FromSeconds(1),
-                TimeSpan.FromSeconds(1));
+                TimeSpan.FromSeconds(2),
+                TimeSpan.FromSeconds(2));
         }
 
         private async Task IncrementTimeHandler()
