@@ -43,13 +43,16 @@ namespace EvilCorp.Web
             var regionalSyncDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcSyncTime, timeZone);
 
             var mapping = await GetAlarmClockEmployeeMappingAsync();
+            var alarmClockTasks = new List<Task>();
             foreach (var alarmClockId in mapping.Keys)
             {
                 var alarmClockProxy = ProxyFactory.CreateActorProxy<IAlarmClock>(
                     new ActorId(alarmClockId),
                     nameof(AlarmClockActor));
-                await alarmClockProxy.SetSyncTimeAsync(regionalSyncDateTime);
+                alarmClockTasks.Add(alarmClockProxy.SetSyncTimeAsync(regionalSyncDateTime));
             }
+
+            await Task.WhenAll(alarmClockTasks);
         }
 
         public async Task<string> GetEmployeeIdAsync(string alarmClockId)
