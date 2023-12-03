@@ -90,16 +90,5 @@ namespace EvilCorp.Web
             mapping.Remove(alarmClockEmployeeKey);
             await SetAlarmClockEmployeeMappingAsync(mapping);
         }
-
-        public async Task<string[]> GetEmployeeIdsAsync()
-        {
-            var regionalOfficeData = await GetRegionalOfficeDataAsync();
-            var headQuartersId = new ActorId(regionalOfficeData.HeadQuartersId);
-            var headQuartersProxy = ProxyFactory.CreateActorProxy<IHeadQuarters>(
-                headQuartersId,
-                nameof(HeadQuartersActor));
-
-            return await headQuartersProxy.GetEmployeeIdsForRegionalOfficeAsync(Id.GetId());
-        }
     }
 }

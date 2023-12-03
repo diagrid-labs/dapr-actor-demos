@@ -1,8 +1,6 @@
-using Dapr.Actors;
-
 namespace EvilCorp.Interfaces
 {
-    public interface IRealtimeNotification : IActor
+    public interface IRealtimeNotification
     {
         Task SendAlarmClockIdsMessageAsync(string[] alarmClockIds);
         Task SendUpdateTimeMessageAsync(AlarmClockMessage alarmClockMessage);
