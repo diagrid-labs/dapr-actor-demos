@@ -1,0 +1,61 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "EvilCorpDemo",
+  "steps": [
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Program.cs",
+      "description": "## Program.cs - AddActors\n\nAdd Actor definitions to the services collection.",
+      "line": 19
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Program.cs",
+      "description": "## Program.cs - /init endpoint\n\nUses the SimulationActor to initialize the other Actors.",
+      "line": 55
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Actors/SimulationActor.cs",
+      "description": "## SimulationActor - InitActorAsync\n\nCreates proxies for the other actors and set their initial values.",
+      "line": 16
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Actors/SimulationActor.cs",
+      "description": "## SimulationActor - AddRegionalOffice\n\nCreates a RegionalOfficeActor and adds alarmclocks and employees to it.",
+      "line": 57
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Actors/SimulationActor.cs",
+      "description": "## SimulationActor - AddAlarmClocksAndEmployees\n\nCreates a range of AlarmClockActors and EmployeeActors, and returns a dictionary of the ids of the two.",
+      "line": 71
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Program.cs",
+      "description": "## Program.cs - /start endpoint\n\nUses the SimulationActor to progress the alarm clock time.",
+      "line": 57
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Actors/SimulationActor.cs",
+      "description": "## SimulationActor - StartTimeAsync\n\nUses the RegionalOfficeActors to set the alarm clock time for all alarm clocks for that region.",
+      "line": 42
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Actors/RegionalOfficeActor.cs",
+      "description": "## RegionalOfficeActor - SetAlarmClockTime\n\nIterates over the alarm clock IDs and sets the sync time on the AlarmClockActor.",
+      "line": 36
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Actors/AlarmClockActor.cs",
+      "description": "## AlarmClockActor - SetSyncTimeAsync\n\nSets the alarm clock time, and registers the timer that increments the time.",
+      "line": 132
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Actors/AlarmClockActor.cs",
+      "description": "## AlarmClockActor - IncrementTimeHandler\n\nThis method is responsible for incrementing the alarm clock time, and handling the alarm in case the alarm clock time is equal to or later than the alarm time. ",
+      "line": 148
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Actors/AlarmClockActor.cs",
+      "description": "## AlarmClockActor - AlarmHandler\n\nThis method is responsible for getting the employee response, updating the snooze count and informing the regional office in case the employee did not respond on time.",
+      "line": 63
+    }
+  ]
+}
