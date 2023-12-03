@@ -56,12 +56,6 @@ namespace EvilCorp.Web
             }
         }
 
-        public async Task<string[]> GetEmployeeIdsForRegionalOfficeAsync(string regionalOfficeId)
-        {
-            var employeeIds = await GetEmployeeIdsAsync();
-            return employeeIds[regionalOfficeId];
-        }
-
         private async Task UpdateFiredEmployeeIdsAsync(string regionalOfficeId, string employeeId)
         {
             var firedEmployees = await GetFiredEmployeeIdsAsync();

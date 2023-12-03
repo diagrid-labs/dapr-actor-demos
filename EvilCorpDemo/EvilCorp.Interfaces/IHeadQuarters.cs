@@ -9,7 +9,6 @@ namespace EvilCorp.Interfaces
         Task SetEmployeeIdsAsync(Dictionary<string, string[]> employeeIds);
         Task<Dictionary<string,string[]>> GetEmployeeIdsAsync();
         Task<Dictionary<string,string[]>> GetFiredEmployeeIdsAsync();
-        Task<string[]> GetEmployeeIdsForRegionalOfficeAsync(string regionalOfficeId);
         Task FireEmployeeAsync(string regionalOfficeId, string employeeId);
     }
 }
