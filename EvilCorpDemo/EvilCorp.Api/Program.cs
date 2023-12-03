@@ -23,8 +23,8 @@ builder.Services.AddActors(options =>
     options.Actors.RegisterActor<AlarmClockActor>();
     options.Actors.RegisterActor<EmployeeActor>();
     options.Actors.RegisterActor<SimulationActor>();
-    options.ActorScanInterval = TimeSpan.FromSeconds(10);
-    options.ActorIdleTimeout = TimeSpan.FromMinutes(10);
+    options.ActorScanInterval = TimeSpan.FromSeconds(30);
+    options.ActorIdleTimeout = TimeSpan.FromMinutes(15);
     options.ReentrancyConfig = new ActorReentrancyConfig()
     {
         Enabled = true,
