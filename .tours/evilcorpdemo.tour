@@ -4,7 +4,17 @@
   "steps": [
     {
       "directory": "EvilCorpDemo",
-      "description": "## EvilCorpDemo\n\nA fictional company called EvilCorp 😈 wants their employees to be more productive and have decided to implement a system with smart alarm clocks that will wake up their employees at 7am. If the employees have not acknowledged the alarm within 3 snoozes, the alarm will send a message to the headquarters to lay off the employee 😱.\n\nThe front-end of the demo is a basic HTML page that uses [p5js](https://p5js.org/) to draw the information on the page. The back-end is a [Dapr](https://dapr.io/) application written in ASP.NET that uses actors for the headquarters, the regional office, the employees, and the alarm clocks. Communication between the back-end and the front-end is realized with [Ably](https://ably.com/).\n\n![EvilCorp Demo](./media/evilcorp-demo.gif)"
+      "description": "## EvilCorpDemo\n\nA fictional company called EvilCorp 😈 wants their employees to be more productive and have decided to implement a system with smart alarm clocks that will wake up their employees at 7am. If the employees have not acknowledged the alarm within 3 snoozes, the alarm will send a message to the headquarters to lay off the employee 😱.\n\nThe front-end of the demo is a basic HTML page that uses [p5js](https://p5js.org/) to draw the information on the page. The back-end is a [Dapr](https://dapr.io/) application written in ASP.NET that uses actors for the headquarters, the regional office, the employees, and the alarm clocks. Communication between the back-end and the front-end is realized with [Ably](https://ably.com/).\n\n![EvilCorp Demo](./media/evilcorp-demo.gif)\n\n### Running the app\n\nNavigate to the EvilCorpDemo folder:\n>> cd EvilCorpDemo \n\nBuild the project (and restore packages):\n>> dotnet build \n\nUse Dapr multi-app run to start the application:\n>> dapr run -f .",
+      "selection": {
+        "start": {
+          "line": 9,
+          "character": 1
+        },
+        "end": {
+          "line": 9,
+          "character": 20
+        }
+      }
     },
     {
       "directory": "EvilCorpDemo/EvilCorp.Api",
@@ -118,5 +128,6 @@
       "description": "## EmployeeActor - GetAlarmResponse\n\nThis method randomly selects an alarm acknowledge or alarm snoose response and returns that to the caller.",
       "line": 25
     }
-  ]
+  ],
+  "isPrimary": true
 }

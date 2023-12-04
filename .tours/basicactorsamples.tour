@@ -4,7 +4,17 @@
   "steps": [
     {
       "directory": "BasicActorSamples",
-      "description": "## BasicActorSamples\n\nThis folder contains a .NET web application with several actors to demonstrate the Dapr Actor functionalities:\n\n- HelloWorldActor\n- StatefulActor\n- TimerActor\n- ReminderActor\n- ActorToActor"
+      "description": "## BasicActorSamples\n\nThis folder contains a .NET web application with several actors to demonstrate the Dapr Actor functionalities:\n\n- HelloWorldActor\n- StatefulActor\n- TimerActor\n- ReminderActor\n- ActorToActor\n\nNavigate to the BasicActorSamples folder:\n>> cd BasicActorSamples \n\nBuild the project (and restore packages):\n>> dotnet build \n\nUse Dapr multi-app run to start the application:\n>> dapr run -f .",
+      "selection": {
+        "start": {
+          "line": 11,
+          "character": 1
+        },
+        "end": {
+          "line": 18,
+          "character": 17
+        }
+      }
     },
     {
       "file": "BasicActorSamples/Actors/HelloWorldActor.cs",
