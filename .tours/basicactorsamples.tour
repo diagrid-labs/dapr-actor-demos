@@ -1,0 +1,60 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "BasicActorSamples",
+  "steps": [
+    {
+      "directory": "BasicActorSamples",
+      "description": "## BasicActorSamples\n\nThis folder contains a .NET web application with several actors to demonstrate the Dapr Actor functionalities:\n\n- HelloWorldActor\n- StatefulActor\n- TimerActor\n- ReminderActor\n- ActorToActor"
+    },
+    {
+      "file": "BasicActorSamples/Actors/HelloWorldActor.cs",
+      "description": "## HelloWorldActor",
+      "line": 6
+    },
+    {
+      "file": "BasicActorSamples/basic-actor-samples.http",
+      "description": "## Call HelloWorldActor",
+      "line": 9
+    },
+    {
+      "file": "BasicActorSamples/Actors/StatefulActor.cs",
+      "description": "## StatefulActor",
+      "line": 6
+    },
+    {
+      "file": "BasicActorSamples/basic-actor-samples.http",
+      "description": "## Call StatefulActor",
+      "line": 22
+    },
+    {
+      "file": "BasicActorSamples/Actors/TimerActor.cs",
+      "description": "## TimerActor",
+      "line": 7
+    },
+    {
+      "file": "BasicActorSamples/basic-actor-samples.http",
+      "description": "## Call TimerActor",
+      "line": 98
+    },
+    {
+      "file": "BasicActorSamples/Actors/ReminderActor.cs",
+      "description": "## ReminderActor",
+      "line": 6
+    },
+    {
+      "file": "BasicActorSamples/basic-actor-samples.http",
+      "description": "## Call ReminderActor",
+      "line": 115
+    },
+    {
+      "file": "BasicActorSamples/Actors/ActorToActor.cs",
+      "description": "## ActorToActor",
+      "line": 6
+    },
+    {
+      "file": "BasicActorSamples/basic-actor-samples.http",
+      "description": "## Call ActorToActor",
+      "line": 141
+    }
+  ]
+}
