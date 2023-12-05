@@ -7,8 +7,8 @@ apps:
     appPort: 7100
     daprHTTPPort: 3500
     command: ["dotnet", "run"]
-    appLogDestination: console
-    daprdLogDestination: console
+    appLogDestination: fileAndConsole
+    daprdLogDestination: fileAndConsole
     logLevel: info
     enableApiLogging: false
   - appID: evilcorp-frontend
