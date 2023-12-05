@@ -17,6 +17,16 @@
       }
     },
     {
+      "file": "BasicActorSamples/BasicActorSamples.csproj",
+      "description": "## BasicActorSamples.csproj package references",
+      "line": 11
+    },
+    {
+      "file": "BasicActorSamples/Program.cs",
+      "description": "## Program.cs - AddActors",
+      "line": 5
+    },
+    {
       "file": "BasicActorSamples/Actors/HelloWorldActor.cs",
       "description": "## HelloWorldActor",
       "line": 6
@@ -66,5 +76,6 @@
       "description": "## Call ActorToActor",
       "line": 141
     }
-  ]
+  ],
+  "isPrimary": true
 }

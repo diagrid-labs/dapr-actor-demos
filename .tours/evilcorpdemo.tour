@@ -128,6 +128,5 @@
       "description": "## EmployeeActor - GetAlarmResponse\n\nThis method randomly selects an alarm acknowledge or alarm snoose response and returns that to the caller.",
       "line": 25
     }
-  ],
-  "isPrimary": true
+  ]
 }
