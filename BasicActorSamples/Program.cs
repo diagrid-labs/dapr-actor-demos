@@ -1,13 +1,15 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using BasicActorSamples.Actors;
+
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddActors(options =>
 {
     // Register actor types and configure actor settings
-    options.Actors.RegisterActor<BasicActorSamples.Actors.HelloWorldActor>();
-    options.Actors.RegisterActor<BasicActorSamples.Actors.StatefulActor>();
-    options.Actors.RegisterActor<BasicActorSamples.Actors.TimerActor>();
-    options.Actors.RegisterActor<BasicActorSamples.Actors.ReminderActor>();
-    options.Actors.RegisterActor<BasicActorSamples.Actors.ActorToActor>();
+    options.Actors.RegisterActor<HelloWorldActor>();
+    options.Actors.RegisterActor<StatefulActor>();
+    options.Actors.RegisterActor<TimerActor>();
+    options.Actors.RegisterActor<ReminderActor>();
+    options.Actors.RegisterActor<ActorToActor>();
 });
 
 var app = builder.Build();
