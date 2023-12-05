@@ -24,7 +24,7 @@
     {
       "file": "BasicActorSamples/basic-actor-samples.http",
       "description": "## Call HelloWorldActor",
-      "line": 9
+      "line": 7
     },
     {
       "file": "BasicActorSamples/Actors/StatefulActor.cs",
