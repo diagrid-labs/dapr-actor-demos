@@ -17,6 +17,11 @@
       }
     },
     {
+      "file": "EvilCorpDemo/dapr.yaml",
+      "description": "## dapr.yaml",
+      "line": 1
+    },
+    {
       "directory": "EvilCorpDemo/EvilCorp.Api",
       "description": "## EvilCorp.Api project\n\nThis folder contains .NET web application that contains the actor definitions and two API endpoints."
     },
@@ -127,6 +132,11 @@
       "file": "EvilCorpDemo/EvilCorp.Api/Actors/EmployeeActor.cs",
       "description": "## EmployeeActor - GetAlarmResponse\n\nThis method randomly selects an alarm acknowledge or alarm snoose response and returns that to the caller.",
       "line": 25
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Actors/AlarmClockActor.cs",
+      "description": "## AlarmClockActor- SnoozeAlarmAsync",
+      "line": 32
     }
   ]
 }

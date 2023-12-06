@@ -17,6 +17,11 @@
       }
     },
     {
+      "file": "BasicActorSamples/dapr.yaml",
+      "description": "## Dapr.yaml",
+      "line": 1
+    },
+    {
       "file": "BasicActorSamples/BasicActorSamples.csproj",
       "description": "## BasicActorSamples.csproj package references",
       "line": 11
