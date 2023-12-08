@@ -17,7 +17,11 @@ namespace BasicActorSamples.Actors
         {
         }
 
-        public async Task ReceiveReminderAsync(string reminderName, byte[] state, TimeSpan dueTime, TimeSpan period)
+        public async Task ReceiveReminderAsync(
+            string reminderName,
+            byte[] state,
+            TimeSpan dueTime,
+            TimeSpan period)
         {
             if (reminderName == REMINDER_NAME)
             {
