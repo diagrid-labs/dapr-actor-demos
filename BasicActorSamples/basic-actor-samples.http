@@ -121,7 +121,7 @@ Content-Type: application/json
 
 {
     "dueTime" : "0h0m2s0ms",
-    "period" : "R3/P0Y0M0W0DT0H0M5S"
+    "period" : "R3/P0Y0M0W0DT0H0M3S"
 }
 
 
