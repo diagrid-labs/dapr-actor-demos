@@ -137,6 +137,21 @@
       "file": "EvilCorpDemo/EvilCorp.Api/Actors/AlarmClockActor.cs",
       "description": "## AlarmClockActor- SnoozeAlarmAsync",
       "line": 32
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Actors/AlarmClockActor.cs",
+      "description": "## AlarmClockActor - FireEmployee",
+      "line": 121
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Actors/RegionalOfficeActor.cs",
+      "description": "## RegionalOfficeActor - FireEmployee",
+      "line": 66
+    },
+    {
+      "file": "EvilCorpDemo/EvilCorp.Api/Actors/HeadQuartersActor.cs",
+      "description": "## HeadQuartersActor - FireEmployeeAsync",
+      "line": 36
     }
   ]
 }
