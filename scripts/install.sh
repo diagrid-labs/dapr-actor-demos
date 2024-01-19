@@ -1,8 +1,7 @@
 dapr uninstall
 dapr init
-cd ./BasicActorSamples
-dotnet build
-cd ..
-cd ./EvilCorpDemo
-dotnet build
-cd ..
+dotnet build ./BasicActorSamples/BasicActorSamples.sln
+dotnet build ./EvilCorpDemo/EvilCorpDemo.sln
+cd ./EvilCorpDemo/EvilCorp.FrontEnd
+npm install
+cd ../..
