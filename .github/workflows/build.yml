@@ -19,6 +19,6 @@ jobs:
       with:
         dotnet-version: 7.0.x
     - name: Restore dependencies
-      run: dotnet restore /BasicActorSamples
+      run: dotnet restore ./BasicActorSamples
     - name: Build
-      run: dotnet build /BasicActorSamples --no-restore
+      run: dotnet build ./BasicActorSamples --no-restore
