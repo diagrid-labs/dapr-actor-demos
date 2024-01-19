@@ -18,7 +18,11 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
-    - name: Restore dependencies
+    - name: Restore dependencies BasicActorSamples
       run: dotnet restore ./BasicActorSamples
-    - name: Build
+    - name: Build BasicActorSamples
       run: dotnet build ./BasicActorSamples --no-restore
+    - name: Restore dependencies EvilCorpDemo
+      run: dotnet restore ./EvilCorpDemo
+    - name: Build EvilCorpDemo
+      run: dotnet build ./EvilCorpDemo --no-restore
