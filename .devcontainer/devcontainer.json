@@ -6,7 +6,7 @@
 		"ghcr.io/devcontainers/features/docker-in-docker": {}
 	},
 
-	"forwardPorts": [7100, 3500],
+	"forwardPorts": [7100, 3500, 5500],
 	"postCreateCommand": "bash scripts/install.sh",
 	
 	"customizations": {
@@ -18,7 +18,9 @@
 				"ritwickdey.LiveServer"
 			],
 			"settings": {
-				"dotnet.defaultSolution": "BasicActorSamples/BasicActorSamples.sln"
+				"dotnet.defaultSolution": "BasicActorSamples/BasicActorSamples.sln",
+				"liveServer.settings.port": 5500,
+    			"liveServer.settings.root": "/EvilCorpDemo/EvilCorp.FrontEnd/client"
 			}
 		}
 	},
