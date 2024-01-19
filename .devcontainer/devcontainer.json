@@ -1,0 +1,26 @@
+{
+	"name": ".NET DevContainer",
+	"image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0-bookworm",
+	"features": {
+		"ghcr.io/dapr/cli/dapr-cli:0": {},
+		"ghcr.io/devcontainers/features/docker-in-docker": {}
+	},
+
+	"forwardPorts": [7100, 3500],
+	"postCreateCommand": "bash scripts/install.sh",
+	
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-dotnettools.csharp",
+				"humao.rest-client",
+				"vsls-contrib.codetour",
+				"ritwickdey.LiveServer"
+			],
+			"settings": {
+				"dotnet.defaultSolution": "BasicActorSamples/BasicActorSamples.sln"
+			}
+		}
+	},
+	"remoteUser": "root"
+}
