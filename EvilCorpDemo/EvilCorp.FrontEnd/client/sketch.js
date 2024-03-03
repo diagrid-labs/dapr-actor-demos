@@ -19,7 +19,7 @@ async function createActors() {
     select("#createActorsButton").elt.disabled = true;
     let employeeCount = select("#numberOfEmployeesInput").value();
 
-    let url = `http://evilcorp-api:7100/init/${employeeCount}`;
+    let url = `http://localhost:7100/init/${employeeCount}`;
     let options = {
         method: 'POST',
         mode: "no-cors",
@@ -30,7 +30,7 @@ async function createActors() {
 async function startTime() {
     select("#startTimeButton").elt.disabled = true;
 
-    let url = "http://evilcorp-api:7100/start";
+    let url = "http://localhost:7100/start";
     let params = {
         method: "POST",
         mode: "no-cors",
