@@ -23,5 +23,8 @@ COPY --from=build-env /back-end/out ./
 EXPOSE 7100
 EXPOSE 3500
 
+ENV ASPNETCORE_HTTP_PORTS=7100
+ENV ASPNETCORE_URLS=http://+:7100
+
 # Start the application
 ENTRYPOINT ["dotnet", "EvilCorp.Api.dll"]

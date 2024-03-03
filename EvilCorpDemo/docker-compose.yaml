@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   evilcorp-api:
+    hostname: evilcorp-api
     build: 
       context: ./
       dockerfile: Dockerfile
@@ -30,6 +31,7 @@ services:
     network_mode: "service:evilcorp-api"
 
   evilcorp-frontend:
+    hostname: evilcorp-frontend
     build: 
       context: ./EvilCorp.FrontEnd
       dockerfile: Dockerfile
