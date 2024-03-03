@@ -1,19 +1,19 @@
 version: '3.8'
 services:
-  backend:
-    container_name: evilcorp-api
+  evilcorp-api:
     build: 
       context: ./
       dockerfile: Dockerfile
     ports:
       - 7100:7100
       - 3500:3500
+    env_file:
+      - .env
     networks:
       - network
     depends_on:
       - placement
-  backend-dapr:
-    container_name: api-dapr
+  evilcorp-api-dapr:
     image: "daprio/daprd:1.12.5"
     command: ["./daprd",
      "-app-id", "evilcorp-api",
@@ -21,42 +21,51 @@ services:
      "-dapr-http-port", "3500",
      "-placement-host-address", "placement:50006",
      "-resources-path", "/resources",
-     "-log-level","warn"]
+     "-log-level","info"]
     volumes:
-        - ./resources/:/resources
-    network_mode: "service:backend"
+        - ../resources/:/resources
+    depends_on:
+      - evilcorp-api
+    network_mode: "service:evilcorp-api"
 
-  frontend:
-    container_name: evilcorp-frontend
+  evilcorp-frontend:
     build: 
       context: ./EvilCorp.FrontEnd
       dockerfile: Dockerfile
     ports:
       - 5500:5500
       - 3501:3501
+    env_file:
+      - .env
     networks:
       - network
 
-  frontend-dapr:
-    container_name: frontend-dapr
+  evilcorp-frontend-dapr:
     image: "daprio/daprd:1.12.5"
     command: ["./daprd",
      "-app-id", "evilcorp-frontend",
      "-app-port", "5500",
      "-dapr-http-port", "3501",
-     "-placement-host-address", "placement:50006",
      "-resources-path", "/resources",
-     "-log-level","warn"]
+     "-log-level","info"]
     volumes:
-        - ./resources/:/resources
-    network_mode: "service:frontend"
+        - ../resources/:/resources
+    depends_on:
+      - evilcorp-frontend
+    network_mode: "service:evilcorp-frontend"
 
   placement:
-    container_name: placement
     image: "daprio/dapr:1.12.5"
     command: ["./placement", 
      "-port", "50006",
      "-log-level","warn"]
+    networks:
+      - network
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6380:6379"
     networks:
       - network
 

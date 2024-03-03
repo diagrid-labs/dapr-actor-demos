@@ -10,9 +10,10 @@ app.use(express.json());
 app.use( express.static( __dirname + '/client' ));
 
 app.get('/get-ably-api-key', async (req, res) => {
-  let response = await fetch(`${BASE_URL}/v1.0/secrets/localsecretstore/AblyApiKey`);
-  let secret = await response.json();
-  res.send(secret.AblyApiKey);
+  //let response = await fetch(`${BASE_URL}/v1.0/secrets/localsecretstore/AblyApiKey`);
+  // let secret = await response.json();
+  // res.send(secret.AblyApiKey);
+  res.send(process.env.AblyApiKey);
 });
 
 app.listen(APP_PORT);
