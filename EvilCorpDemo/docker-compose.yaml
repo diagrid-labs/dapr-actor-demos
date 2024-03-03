@@ -1,0 +1,64 @@
+version: '3.8'
+services:
+  backend:
+    container_name: evilcorp-api
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 7100:7100
+      - 3500:3500
+    networks:
+      - network
+    depends_on:
+      - placement
+  backend-dapr:
+    container_name: api-dapr
+    image: "daprio/daprd:1.12.5"
+    command: ["./daprd",
+     "-app-id", "evilcorp-api",
+     "-app-port", "7100",
+     "-dapr-http-port", "3500",
+     "-placement-host-address", "placement:50006",
+     "-resources-path", "/resources",
+     "-log-level","warn"]
+    volumes:
+        - ./resources/:/resources
+    network_mode: "service:backend"
+
+  frontend:
+    container_name: evilcorp-frontend
+    build: 
+      context: ./EvilCorp.FrontEnd
+      dockerfile: Dockerfile
+    ports:
+      - 5500:5500
+      - 3501:3501
+    networks:
+      - network
+
+  frontend-dapr:
+    container_name: frontend-dapr
+    image: "daprio/daprd:1.12.5"
+    command: ["./daprd",
+     "-app-id", "evilcorp-frontend",
+     "-app-port", "5500",
+     "-dapr-http-port", "3501",
+     "-placement-host-address", "placement:50006",
+     "-resources-path", "/resources",
+     "-log-level","warn"]
+    volumes:
+        - ./resources/:/resources
+    network_mode: "service:frontend"
+
+  placement:
+    container_name: placement
+    image: "daprio/dapr:1.12.5"
+    command: ["./placement", 
+     "-port", "50006",
+     "-log-level","warn"]
+    networks:
+      - network
+
+networks:
+  network:
