@@ -12,6 +12,7 @@ services:
     networks:
       - network
     depends_on:
+      - redis
       - placement
   evilcorp-api-dapr:
     image: "daprio/daprd:1.12.5"
