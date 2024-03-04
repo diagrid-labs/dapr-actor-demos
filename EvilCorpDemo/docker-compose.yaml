@@ -8,8 +8,6 @@ services:
     ports:
       - 7100:7100
       - 3500:3500
-    env_file:
-      - .env
     networks:
       - network
     depends_on:
@@ -38,8 +36,6 @@ services:
     ports:
       - 5500:5500
       - 3501:3501
-    env_file:
-      - .env
     networks:
       - network
 

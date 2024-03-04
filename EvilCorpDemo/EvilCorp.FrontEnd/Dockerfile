@@ -16,5 +16,8 @@ COPY . .
 # Make port 5500 available to the world outside this container
 EXPOSE 5500
 
+ARG ABLY_API_KEY
+ENV AblyApiKey=$ABLY_API_KEY
+
 # Run your app when the container launches
 CMD ["npm", "start"]

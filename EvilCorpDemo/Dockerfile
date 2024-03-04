@@ -26,5 +26,8 @@ EXPOSE 3500
 ENV ASPNETCORE_HTTP_PORTS=7100
 ENV ASPNETCORE_URLS=http://+:7100
 
+ARG ABLY_API_KEY
+ENV AblyApiKey=$ABLY_API_KEY
+
 # Start the application
 ENTRYPOINT ["dotnet", "EvilCorp.Api.dll"]
