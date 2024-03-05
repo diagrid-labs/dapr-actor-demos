@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  selector:
+    app: backend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 7100
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "backend"
+        dapr.io/app-port: "7100"
+        dapr.io/enable-api-logging: "true"
+    spec:
+      containers:
+      - name: backend
+        image: localhost:5000/backend:1
+        env:
+        - name: APP_PORT
+          value: "7100"
+        ports:
+        - containerPort: 7100
+        imagePullPolicy: IfNotPresent
