@@ -13,6 +13,12 @@ docker push localhost:5000/backend:1
 docker push localhost:5000/frontend:1
 ```
 
+Alternatively, load the images to kind:
+
+```bash
+kind load docker-image localhost:5000/backend:1 localhost:5000/frontend:1
+```
+
 - Create a kind cluster:
 
 ```bash
@@ -43,6 +49,16 @@ kubectl patch deployment metrics-server -n kube-system --type "json" -p '[{"op":
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 ```
 
+- Install Redis:
+
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+helm repo update
+
+helm install redis bitnami/redis --set image.tag=6.2
+```
+
 - Install Conductor agent:
 
 ```bash
@@ -50,6 +66,13 @@ kubectl apply -f <ID>-agent-manifest.yaml
 ```
 
 > Wait for Dapr to be installed.
+
+- Install State Store Component:
+
+```bash
+kubectl apply -f statestore.yaml
+```
+
 
 - Deploy backend:
 
