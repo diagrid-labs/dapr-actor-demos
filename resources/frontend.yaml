@@ -5,15 +5,13 @@ metadata:
   labels:
     app: frontend
 spec:
+  type: NodePort
   selector:
     app: frontend
   ports:
-  - protocol: TCP
+  - name: http
     port: 5500
-    targetPort: 5500
-  type: LoadBalancer
-  externalIPs:
-  - 172.22.0.11
+    nodePort: 32550
 ---
 apiVersion: apps/v1
 kind: Deployment

@@ -15,11 +15,17 @@ nodes:
   - containerPort: 443
     hostPort: 443
     protocol: TCP
-  - containerPort: 5500
+- role: worker
+  extraPortMappings:
+  - containerPort: 32550
     hostPort: 5500
     protocol: TCP
-  - containerPort: 7100
+  labels:
+    tier: frontend
+- role: worker
+  extraPortMappings:
+  - containerPort: 32710
     hostPort: 7100
     protocol: TCP
-- role: worker
-- role: worker
+  labels:
+    tier: backend

@@ -5,15 +5,13 @@ metadata:
   labels:
     app: backend
 spec:
+  type: NodePort
   selector:
     app: backend
   ports:
-  - protocol: TCP
+  - name: http
     port: 7100
-    targetPort: 7100
-  type: LoadBalancer
-  externalIPs:
-  - 172.22.0.10
+    nodePort: 32710
 ---
 apiVersion: apps/v1
 kind: Deployment
