@@ -29,7 +29,6 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 
 kubectl get pods -n ingress-nginx
 
-??
 kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 ```
 
