@@ -9,10 +9,11 @@ spec:
     app: frontend
   ports:
   - protocol: TCP
-    port: 80
+    port: 5500
     targetPort: 5500
   type: LoadBalancer
-
+  externalIPs:
+  - 172.22.0.11
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -43,4 +44,21 @@ spec:
           value: "5500"
         ports:
         - containerPort: 5500
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Never
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+           name: frontend
+           port: 
+             number: 5500
+---
