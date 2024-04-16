@@ -1,3 +1,5 @@
+let clockFont;
+
 class AlarmClock {
     constructor(id, count, maxItemsPerRow) {
         //    col 0 1 2 3  4  5
@@ -11,9 +13,10 @@ class AlarmClock {
         this.padding = 10;
         this.row = Math.floor(count / this.maxItemsPerRow)
         this.col = count % this.maxItemsPerRow;
-        this.size = 120;
-        this.x = this.padding + this.col * this.size + this.col * this.padding;
-        this.y = this.padding + this.row * this.size + this.row * this.padding;
+        this.sizeX = 120;
+        this.sizeY = 80;
+        this.x = this.padding + this.col * this.sizeX + this.col * this.padding;
+        this.y = this.padding + this.row * this.sizeY + this.row * this.padding;
         this.alarmTime;
         this.currentTime;
         this.isAcknowledged = false;
@@ -91,25 +94,21 @@ class AlarmClock {
         strokeWeight(3);
         stroke('#000000')
         fill(this.getFillColor());
-        rect(this.x, this.y, this.size, this.size, 10);
+        rect(this.x, this.y, this.sizeX, this.sizeY, 10);
         
         strokeWeight(0);
         textAlign(CENTER);
-        textFont('monospace');
+        textFont(clockFont);
         fill(this.getTextColor());
-        textSize(20);
-        text(this.label, this.x + this.size/2, this.y + this.size/3);
+        textSize(16);
+        text(this.label, this.x + this.sizeX/2, this.y + this.sizeY/4);
         if (this.currentTime) {
-            textSize(16);
-            text(this.currentTime, this.x + this.size*(3/4), this.y + this.size/1.8);
-        }
-        if (this.alarmTime) {
-            textSize(12);
-            text(this.alarmTime, this.x + this.size/4, this.y + this.size/1.8);
+            textSize(26);
+            text(this.currentTime, this.x + this.sizeX/2, this.y + this.sizeY/1.6);
         }
         if (this.snoozeCount > 0) {
             textSize(16);
-            text(this.snoozeCount, this.x + this.size/2, this.y + this.size/1.3);
+            text(this.snoozeCount, this.x + this.sizeX/2, this.y + this.sizeY/1.2);
         }
     }
 }

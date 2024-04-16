@@ -7,6 +7,7 @@ let alarmClocks = [];
 function setup() {
     frameRate(30);
     createCanvas(windowWidth, windowHeight);
+    clockFont = loadFont('DS-DIGIB.ttf');
 }
 
 function connectClient() {
@@ -47,7 +48,7 @@ function test() {
     handleAlarmTriggered({Id: "AlarmClock-2"});
     handleUpdateTime({Id: "AlarmClock-3", CurrentTime: "12:34", "AlarmTime": "7:00"});
     handleSnoozeIncrement({Id: "AlarmClock-4", CurrentTime: "12:34", "AlarmTime": "7:00", SnoozeCount: 1});
-    handleSnoozeLimit({Id: "AlarmClock-5", CurrentTime: "12:34", "AlarmTime": "7:00", SnoozeCount: 1});
+    handleSnoozeLimit({Id: "AlarmClock-5", CurrentTime: "12:34", "AlarmTime": "7:00", SnoozeCount: 4});
 }
 
 function draw() {
