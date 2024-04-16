@@ -40,7 +40,7 @@ namespace BasicActorSamples.Actors
                 count = conditionalValue.Value + 1;
             }
             await StateManager.SetStateAsync(SNOOZE_COUNT_KEY, count);
-            Console.WriteLine($"{Encoding.UTF8.GetString(data)} {count}");
+            Console.WriteLine($"{nameof(TimerActor)}-{Id} {Encoding.UTF8.GetString(data)} {count}");
         }
         public async Task ResetSnoozeCount()
         {

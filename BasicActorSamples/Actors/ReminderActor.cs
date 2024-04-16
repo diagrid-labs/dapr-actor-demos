@@ -33,6 +33,7 @@ namespace BasicActorSamples.Actors
                     count = conditionalValue.Value + 1;
                 }
                 await StateManager.SetStateAsync(SNOOZE_COUNT_KEY, count);
+                Console.WriteLine($"{nameof(ReminderActor)}-{Id} {count}");
             }
         }
         public async Task ResetSnoozeCount()

@@ -16,7 +16,8 @@
 				"ms-dotnettools.csharp",
 				"humao.rest-client",
 				"vsls-contrib.codetour",
-				"ritwickdey.LiveServer"
+				"ritwickdey.LiveServer",
+				"cweijan.vscode-redis-client"
 			],
 			"settings": {
 				"dotnet.defaultSolution": "BasicActorSamples/BasicActorSamples.sln",
