@@ -20,8 +20,8 @@ namespace EvilCorp.Web
             var headQuartersId = new ActorId("headquarters");
             var headQuartersProxy = ProxyFactory.CreateActorProxy<IHeadQuarters>(headQuartersId, nameof(HeadQuartersActor));
 
-            // At 6:00 UTC regional offices will sync the time with all the AlarmClocks
-            var utcSyncTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 6, 0, 0);
+            // At 5:30 UTC regional offices will sync the time with all the AlarmClocks
+            var utcSyncTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 5, 30, 0);
             var globalEmployeeIdList = new Dictionary<string, string[]>();
 
             var londonOfficeData = new RegionalOfficeData("London", "GMT Standard Time", headQuartersId.GetId(), utcSyncTime);

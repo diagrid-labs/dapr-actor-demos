@@ -14,6 +14,84 @@ When the demo is run you'll see a realtime display of the alarm clocks in the Ev
 - Blue: Alarm has been snoozed.
 - Red: Alarm has been snoozed for too long, employee will be laid off.
 
+#### InitActors sequence diagram
+
+```mermaid
+sequenceDiagram
+    participant A as API
+    participant S as Simulation
+    participant HQ as Headquarters
+    participant RO as RegionalOffice
+    participant AC as AlarmClock
+    participant E as Employee
+
+A->>S: CreateActorProxy
+A->>S: InitActorsAsync
+S->>HQ: CreateActorProxy
+S->>HQ: SetRegionalOfficeIdsAsync
+S->>HQ: SetEmployeeIdsAsync
+S->>RO: CreateActorProxy
+S->>RO: SetRegionalOfficeDataAsync
+loop for 1 to employeeCount
+    S->>AC: CreateActorProxy
+    S->>AC: SetAlarmClockDataAsync
+    S->>E: CreateActorProxy
+    S->>E: SetEmployeeDataAsync
+end
+S->>RO: SetAlarmClockEmployeeMappingAsync
+```
+
+#### StartTime sequence diagram
+
+```mermaid
+sequenceDiagram
+    participant A as API
+    participant S as Simulation
+    participant HQ as Headquarters
+    participant RO as RegionalOffice
+    participant AC as AlarmClock
+    participant E as Employee
+
+A->>S: StartTimeAsync
+S->>HQ: CreateActorProxy
+S->>HQ: GetRegionalOfficeIdsAsync
+loop for each regional office
+    S->>RO: CreateActorProxy
+    S->>RO: GetRegionalOfficeDataAsync
+    S->>RO: SetAlarmClockTimeAsync
+    loop for each alarm clock
+        RO->>AC: CreateActorProxy
+        RO->>AC: SetSyncTimeAsync
+        AC->>AC: RegisterTimerAsync
+    end
+end
+
+loop every second
+    AC->>AC: IncrementTimeHandler
+    alt time => alarm time
+        AC->>AC: AlarmHandler
+        AC->>RO: CreateActorProxy
+        AC->>RO: GetEmployeeIdAsync
+        AC->>E: CreateActorProxy
+        AC->>E: GetAlarmResponse
+        alt employee acknowledged
+            AC->>AC: StopTimerAsync
+        else employee snoozed
+            AC->>AC: SnoozeAlarmAsync
+        end
+        AC->>AC: GetSnoozeCountAsync
+        alt snooze count > 3
+            AC->>RO: CreateActorProxy
+            AC->>RO: FireEmployeeAsync
+            RO->>E: CreateActorProxy
+            RO->>E: SetIsFiredAsync
+            RO->>HQ: CreateActorProxy
+            RO->>HQ: FireEmployeeAsync
+        end
+    end
+end
+```
+
 ### Prerequisites for running the demo locally
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
